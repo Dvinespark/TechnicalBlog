@@ -1,12 +1,9 @@
 from flask import Flask
+from views import views
 
 app = Flask(__name__)
 
+app.add_url_rule('/', 'index', view_func=views.index)
 
-@app.route('/')
-def home():
-    return "App is running..."
-
-
-if __name__ == "__name__":
-    app.run()
+if __name__ == "__main__":
+    app.run(debug=True)
