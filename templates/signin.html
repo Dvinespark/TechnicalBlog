@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %} SignIn | TechBlog {% endblock title %}
+{% block body %}
+    <!-- Sign In Section Begin -->
+    <div class="signin">
+        <div class="signin__warp">
+            <div class="signin__content">
+                <div class="signin__logo">
+                    <a href="{{ url_for('index') }}"><img src="static/img/siign-in-logo.png" alt=""></a>
+                </div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt labore dolore
+                    magna aliqua viverra.</p>
+                <div class="signin__form">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tabs-2" role="tab" aria-selected="false">
+                                Sign in
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-1" role="tab" aria-selected="false">
+                                Sign up
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-2" role="tabpanel">
+                            <div class="signin__form__text">
+                                <p>Please enter your credentials</p>
+                                <div class="signin__form__signup__social">
+                                </div>
+                                <div class="divide">Have fun!</div>
+                                <form action="{{url_for('login')}}" method="post">
+                                    <input type="text" name="username" placeholder="User Name*">
+                                    <input type="password" name="password" placeholder="Password">
+                                    <button type="submit" class="site-btn">Sign In</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-1" role="tabpanel">
+                            <div class="signin__form__text">
+                                <p>This information is confidential.</p>
+                                <div class="signin__form__signup__social">
+                                </div>
+                                <div class="divide">First try and then Complain cheers!!</div>
+                                <form action="#">
+                                    <input type="text" placeholder="User Name*">
+                                    <input type="text" placeholder="Password">
+                                    <input type="text" placeholder="Confirm Password">
+                                    <input type="text" placeholder="Email Address">
+                                    <input type="text" placeholder="Full Name">
+                                    <label for="sign-agree-check">
+                                        I agree to the terms & conditions
+                                        <input type="checkbox" id="sign-agree-check">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <button type="submit" class="site-btn">Register Now</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Sign In Section End -->
+
+{% endblock body %}

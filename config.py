@@ -7,3 +7,4 @@ db_credentials = {
 
 }
 db_connection_string = db_credentials["conn_string"].format(db_credentials["db_user"], db_credentials["db_password"])
+flask_secret_key = 'BAD_SECRET_KEY'
