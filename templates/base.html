@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Technical Blog">
+    <meta name="keywords" content="Techblog, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %} {% endblock title%}</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Unna:400,700&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="static/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="static/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="static/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="static/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="static/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="static/css/style.css" type="text/css">
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Humberger Begin -->
+    <div class="humberger__menu__overlay"></div>
+    <div class="humberger__menu__wrapper">
+        <div class="humberger__menu__logo">
+            <a href="./index.html"><img src="static/img/humberger/humberger-logo.png" alt=""></a>
+        </div>
+        <nav class="humberger__menu__nav mobile-menu">
+            <ul>
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="#">Mobile</a></li>
+                <li><a href="#">Laptop</a></li>
+                <li><a href="#">Electronics</a></li>
+                <li class="dropdown"><a href="#">Pages</a>
+                    <ul class="dropdown__menu">
+                        <li><a href="./categories-grid.html">Categories Grid</a></li>
+                        <li><a href="./categories-list.html">Categories List</a></li>
+                        <li><a href="./single-post.html">Single Post</a></li>
+                        <li><a href="./signin.html">Sign In</a></li>
+                        <li><a href="./404.html">404</a></li>
+                        <li><a href="./typography.html">Typography</a></li>
+                    </ul>
+                </li>
+                <li><a href="./about.html">About</a></li>
+                <li><a href="./contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div id="mobile-menu-wrap"></div>
+        <div class="humberger__menu__about">
+            <div class="humberger__menu__title sidebar__item__title">
+                <h6>About me</h6>
+            </div>
+            <img src="img/humberger/humberger-about.jpg" alt="">
+            <h6>Hi every one! I,m Lena Mollein.</h6>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua.</p>
+            <div class="humberger__menu__about__social sidebar__item__follow__links">
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-youtube-play"></i></a>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+                <a href="#"><i class="fa fa-envelope-o"></i></a>
+            </div>
+        </div>
+        <div class="humberger__menu__subscribe">
+            <div class="humberger__menu__title sidebar__item__title">
+                <h6>Subscribe</h6>
+            </div>
+            <p>Subscribe to our newsletter and get our newest updates right on your inbox.</p>
+            <form action="#">
+                <input type="text" class="email-input" placeholder="Your email">
+                <label for="agree-check">
+                    I agree to the terms & conditions
+                    <input type="checkbox" id="agree-check">
+                    <span class="checkmark"></span>
+                </label>
+                <button type="submit" class="site-btn">Subscribe</button>
+            </form>
+        </div>
+    </div>
+    <!-- Humberger End -->
+
+    {% include "navbar.html" %}
+
+    {% block body %} {% endblock body %}
+
+    {% include "footer.html" %}
+
+    <!-- Js Plugins -->
+    <script src="static/js/jquery-3.3.1.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/js/jquery.slicknav.js"></script>
+    <script src="static/js/owl.carousel.min.js"></script>
+    <script src="static/js/main.js"></script>
+</body>
+
+</html>

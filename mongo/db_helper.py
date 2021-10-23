@@ -1,9 +1,12 @@
 #  This file will hold all the necessary db actions that need to be performed
-
+from config import db_connection_string, db_credentials
 import pymongo
 
 
 class MongoDB:
+    """
+    Base class for initializing mongo db access parameters
+    """
     def __init__(self):
         self._initialize_connection_parameters()
         try:
@@ -15,8 +18,8 @@ class MongoDB:
 
     def _initialize_connection_parameters(self):
         # get connection strings from some setting files
-        self.connection_string = ""
-        self.database_name = ""
+        self.connection_string = db_connection_string
+        self.database_name = db_credentials["db_name"]
         self.mongo_client = None
         self.db_collection = None
 
