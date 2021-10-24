@@ -27,7 +27,11 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabs-2" role="tabpanel">
                             <div class="signin__form__text">
-                                <p>Please enter your credentials</p>
+                                {% if data['login_message'] %}
+                                    <p style="color: red">{{data['login_message']}}</p>
+                                {% else %}
+                                    <p>Please enter your credentials</p>
+                                {% endif %}
                                 <div class="signin__form__signup__social">
                                 </div>
                                 <div class="divide">Have fun!</div>

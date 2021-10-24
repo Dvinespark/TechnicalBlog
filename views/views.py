@@ -36,7 +36,8 @@ def login():
     context = {
         "login_flag": False,
         "user_admin": False,
-        "username": None
+        "username": None,
+        "login_message": ""
     }
     login_flag = session.get("login_flag", False)
     username = session.get("username", None)
@@ -51,13 +52,20 @@ def login():
         print("Post method called")
         username = request.form['username']
         password = request.form['password']
-
-        if username and password:
-            session["login_flag"] = True
-            session["username"] = username
-            return redirect(url_for('index'))
-            # return render_template('index.html', data=context)
-        return "something went wrong"
+        # get data from db
+        db = MongoDB()
+        collection = db.get_collection("user")
+        users = collection.find({})
+        for user in users:
+            if username == user['username'] and password == user["password"]:
+                session["login_flag"] = True
+                session["username"] = username
+                return redirect(url_for('index'))
+            else:
+                session["login_flag"] = False
+        # if username and password doesnot match
+        context["login_message"] = "Incorrect username and password."
+        return render_template("signin.html", data=context)
 
 
 def logout():
