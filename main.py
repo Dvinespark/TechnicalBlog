@@ -14,5 +14,8 @@ app.add_url_rule('/login', 'login', view_func=views.login, methods=["GET", "POST
 # /logout get method
 app.add_url_rule('/logout', 'logout', view_func=views.logout)
 
+# /register post method only
+app.add_url_rule('/register', 'register', view_func=views.register, methods=["POST"])
+
 if __name__ == "__main__":
     app.run(debug=True)

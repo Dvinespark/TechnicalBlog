@@ -25,10 +25,14 @@ def index():
     login_flag = session.get('login_flag', False)
     username = session.get('username', None)
     if login_flag and username:
-        print(session)
         return render_template("index.html", data=context)
+
+    # session variables
     session["login_flag"] = False
     session["username"] = None
+    session["signup_flag"] = False
+    session["signup_message"] = None
+
     return render_template("signin.html", data=context)
 
 
@@ -50,6 +54,10 @@ def login():
 
     if request.method == "POST":
         print("Post method called")
+
+        session["signup_flag"] = False
+        session["signup_message"] = None
+
         username = request.form['username']
         password = request.form['password']
         # get data from db
@@ -75,5 +83,68 @@ def logout():
         "username": None
     }
     session["login_flag"] = False
+    session["signup_flag"] = False
+    session["signup_message"] = None
 
     return render_template("signin.html", data=context)
+
+
+def register():
+    """
+    Create new user
+    :return:
+    """
+    print("register post method called")
+    context = {
+        "login_flag": False,
+        "user_admin": False,
+        "username": None
+    }
+    session["login_flag"] = False
+    username = request.form['username']
+    password1 = request.form['password1']
+    email = request.form['email']
+    fullname = request.form['fullname']
+    user_type = "normal"
+    active = True
+    # store information in mongodb
+    try:
+        db = MongoDB()
+        user_coll = db.get_collection("user")
+        users = user_coll.find({})
+        print(users)
+        print("working upto here")
+        for user in users:
+            if user["username"] == username:
+                session["signup_message"] = "User already exists! Please create a new one with different user."
+                session["signup_flag"] = False
+                return {
+                    "status_code": 201,
+                    "message": "User already exists! Please create a new one with different user.",
+                    "url": url_for("login")
+                }
+        user_coll.insert_one({
+            "username": username,
+            "password": password1,
+            "email": email,
+            "type": user_type,
+            "active": active,
+            "fullname": fullname
+        })
+        session["signup_flag"] = True
+        session["signup_message"] = "User registered successfully. Please proceed login with the user"
+        return {
+            "status_code": 200,
+            "message": "user created successfully.",
+            "url": url_for("login")
+        }
+    except Exception as e:
+        print(e)
+        session["signup_flag"] = False
+        session["signup_message"] = "Something went wrong. Please try again later."
+        return {
+            "status_code": 101,
+            "message": "Something went wrong.",
+            "url": url_for("login")
+        }
+
