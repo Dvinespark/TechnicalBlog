@@ -2,8 +2,6 @@ from flask import render_template, request, redirect, url_for, session
 from mongo.db_helper import MongoDB
 
 
-def is_admin():
-
 def index():
     # db = MongoDB()
     # print(db.connection_string)
