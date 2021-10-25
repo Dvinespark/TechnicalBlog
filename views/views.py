@@ -2,6 +2,8 @@ from flask import render_template, request, redirect, url_for, session
 from mongo.db_helper import MongoDB
 
 
+def is_admin():
+
 def index():
     # db = MongoDB()
     # print(db.connection_string)
@@ -68,6 +70,9 @@ def login():
             if username == user['username'] and password == user["password"]:
                 session["login_flag"] = True
                 session["username"] = username
+                session["admin_flag"] = False
+                if user['type'] == "admin":
+                    session["admin_flag"] = True
                 return redirect(url_for('index'))
             else:
                 session["login_flag"] = False
@@ -148,3 +153,57 @@ def register():
             "url": url_for("login")
         }
 
+# admin panel
+
+def admin():
+
+    context = {
+        "login_flag": False,
+        "user_admin": False,
+        "username": None
+    }
+    login_flag = session.get('login_flag', False)
+    username = session.get('username', None)
+    admin_flag = session.get('admin_flag', False)
+    if login_flag and username and admin_flag:
+        return render_template("admin/admin.html", data=context)
+
+    # session variables
+    session["signup_flag"] = False
+    session["signup_message"] = None
+    session["login_flag"] = False
+    context["login_message"] = "You have to be admin to access that page."
+    return render_template("signin.html", data=context)
+
+
+# list
+def users():
+    current_user = session.get('username', None)
+    db = MongoDB()
+    user_coll = db.get_collection("user")
+    users = user_coll.find({'username': { "$ne": str(current_user) }})
+    context = {
+        "login_flag": False,
+        "user_admin": False,
+        "username": None,
+        "users": users
+    }
+    return render_template("admin/users.html", data=context)
+
+
+# delete user
+def delete_user():
+    context = {
+        "login_flag": False,
+        "user_admin": False,
+        "username": None
+    }
+    username = request.form['username']
+    db = MongoDB()
+    user_coll = db.get_collection('user')
+    user = user_coll.find_one_and_delete({"username": username})
+    return {
+        "status_code": 200,
+        "message": "user deleted successfully.",
+        "url": url_for("users")
+    }
