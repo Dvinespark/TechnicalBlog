@@ -27,5 +27,9 @@ app.add_url_rule('/admin/users', 'users', view_func=views.users, methods=["GET"]
 # delete users
 app.add_url_rule('/admin/users/delete', 'delete-user', view_func=views.delete_user, methods=["POST"])
 
+
+# users
+app.add_url_rule('/admin/blogs', 'blogs', view_func=views.blog_list, methods=["GET"])
+
 if __name__ == "__main__":
     app.run(debug=True)

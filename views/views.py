@@ -2,8 +2,6 @@ from flask import render_template, request, redirect, url_for, session
 from mongo.db_helper import MongoDB
 
 
-def is_admin():
-
 def index():
     # db = MongoDB()
     # print(db.connection_string)
@@ -155,6 +153,7 @@ def register():
 
 # admin panel
 
+
 def admin():
 
     context = {
@@ -207,3 +206,56 @@ def delete_user():
         "message": "user deleted successfully.",
         "url": url_for("users")
     }
+
+# Blog Part here
+
+
+# 1 comment
+def comment_list():
+    comment_data = {
+        "username": "username",
+        "blog_id": "blog_id",
+        "comment": "comment",
+        "active": True
+    }
+
+
+def comment_create():
+    pass
+
+
+def comment_delete():
+    pass
+
+
+# 2 blog
+def blog_list():
+    # blog_data = {
+    #     "username": username,
+    #     "blog_id": password1,
+    #     "small_description": email,
+    #     "active": user_type,
+    #     "long_description": active,
+    #     "photo_url": fullname
+    # }
+    cuser = session.get('username', None)
+    db = MongoDB()
+    user_coll = db.get_collection("user")
+    users = user_coll.find({'username': { "$ne": str(cuser) }})
+    context = {
+        "login_flag": False,
+        "users": users
+    }
+    return render_template("admin/blog.html", data=context)
+
+
+def blog_create():
+    pass
+
+
+def blog_update():
+    pass
+
+
+def blog_delete():
+    pass
