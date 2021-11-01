@@ -1,3 +1,5 @@
+import datetime
+
 from flask import render_template, request, redirect, url_for, session
 from mongo.db_helper import MongoDB
 
@@ -161,6 +163,7 @@ def admin():
         "user_admin": False,
         "username": None
     }
+    # checks for admin
     login_flag = session.get('login_flag', False)
     username = session.get('username', None)
     admin_flag = session.get('admin_flag', False)
@@ -231,26 +234,59 @@ def comment_delete():
 # 2 blog
 def blog_list():
     # blog_data = {
-    #     "username": username,
     #     "blog_id": password1,
     #     "small_description": email,
-    #     "active": user_type,
+    #     "active": True,
     #     "long_description": active,
-    #     "photo_url": fullname
+    #     "photo_url": fullname,
+    #     "blog_type": "feature",  # default type will be normal
+    #     "blog_technology": "mobile", # desktop, science, all
+    #     "inserted_date": today date,
+    #     "updated_date": None,
+    #     "created_by": username,
+    #     "updated_by": username
     # }
-    cuser = session.get('username', None)
+
+    # do the admin check if admin then do the following
+
     db = MongoDB()
-    user_coll = db.get_collection("user")
-    users = user_coll.find({'username': { "$ne": str(cuser) }})
+    blog_coll = db.get_collection("blogs")
+    blogs = blog_coll.find({})
     context = {
-        "login_flag": False,
-        "users": users
+        "blogs": blogs
     }
     return render_template("admin/blog.html", data=context)
 
 
 def blog_create():
-    pass
+    # db.SOME_COLLECTION.find().sort({"_id": -1}).limit(1)
+    db = MongoDB()
+    blog_coll = db.get_collection("blogs")
+    last_blog = blog_coll.find({}, {"_id", "post_id"}).sort({"_id": -1}).limit(1)
+    # do the logic to increment post_id
+    blog_id = 1
+
+    current_user = session.get('username', None)
+    login_flag = session.get('login_flag', False)
+
+    if current_user and login_flag:
+        blog_coll.insert_one({
+            "created_by": current_user,
+            "updated_by": None,
+            "active": True,
+            "small_description": request.form['small_description'],
+            "long_description": request.form['long_description'],
+            "blog_id": blog_id,
+            "photo_url": request.form["photo_url"],
+            "blog_type": request.form["blog_type"],
+            "blog_tech": request.form["blog_technology"],
+            "inserted_date": str(datetime.date.today()),
+            "updated_date": None
+        })
+
+    else:
+        message = "Sorry you're not logged in. Only logged in users are allowed to do this."
+
 
 
 def blog_update():
