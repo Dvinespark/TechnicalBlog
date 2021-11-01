@@ -3,6 +3,11 @@ import datetime
 from flask import render_template, request, redirect, url_for, session
 from mongo.db_helper import MongoDB
 
+STATUS = {
+    "success": 200,
+    "error": 404,
+}
+
 
 def index():
     # db = MongoDB()
@@ -262,36 +267,96 @@ def blog_create():
     # db.SOME_COLLECTION.find().sort({"_id": -1}).limit(1)
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
-    last_blog = blog_coll.find({}, {"_id", "post_id"}).sort({"_id": -1}).limit(1)
+    last_blog_id = blog_coll.find({}, {"blog_id"}).sort({"_id": -1}).limit(1)[0]["blog_id"]
     # do the logic to increment post_id
-    blog_id = 1
+    blog_id = last_blog_id + 1
 
     current_user = session.get('username', None)
     login_flag = session.get('login_flag', False)
-
+    # check if user is logged in
     if current_user and login_flag:
         blog_coll.insert_one({
             "created_by": current_user,
             "updated_by": None,
-            "active": True,
+            "active": request.form['active'],
             "small_description": request.form['small_description'],
             "long_description": request.form['long_description'],
             "blog_id": blog_id,
             "photo_url": request.form["photo_url"],
             "blog_type": request.form["blog_type"],
             "blog_tech": request.form["blog_technology"],
-            "inserted_date": str(datetime.date.today()),
-            "updated_date": None
+            "created_at": str(datetime.date.today()),
+            "updated_at": None
         })
+        return {
+            "status_code": STATUS["success"],
+            "message": "Blog created successfully.",
+            "url": url_for("blogs")
+        }
 
     else:
-        message = "Sorry you're not logged in. Only logged in users are allowed to do this."
-
+        return {
+            "status_code": STATUS["error"],
+            "message": "Sorry something went wrong. Please try again later.",
+            "url": url_for("blogs")
+        }
 
 
 def blog_update():
-    pass
+
+    current_user = session.get('username', None)
+    login_flag = session.get('login_flag', False)
+
+    db = MongoDB()
+    blog_id = request.form['blog_id']
+    blog_coll = db.get_collection("blogs")
+
+    update_record = {}
+    if request.form['active'] is not None:
+        update_record["active"] = request.form['active']
+
+    if request.form['small_description'] is not None:
+        update_record["small_description"] = request.form['small_description']
+
+    if request.form['long_description'] is not None:
+        update_record["long_description"] = request.form['long_description']
+
+    if request.form['photo_url'] is not None:
+        update_record["photo_url"] = request.form['photo_url']
+
+    if request.form['blog_type'] is not None:
+        update_record["blog_type"] = request.form['blog_type']
+
+    if request.form['blog_technology'] is not None:
+        update_record["blog_technology"] = request.form['blog_technology']
+
+    # check if user is logged in
+    if current_user and login_flag:
+        output = blog_coll.update_many({"blog_id": blog_id}, update_record)
+        return {
+            "status_code": STATUS["success"],
+            "message": "Blog updated successfully.",
+            "db_message": output,
+            "url": url_for("blogs")
+        }
+
+    else:
+        return {
+            "status_code": STATUS["error"],
+            "message": "Sorry something went wrong. Please try again later.",
+            "url": url_for("blogs")
+        }
 
 
 def blog_delete():
-    pass
+
+    blog_id = request.form['blog_id']
+    db = MongoDB()
+    blog_coll = db.get_collection("blogs")
+    blog = blog_coll.find_one_and_delete({"blog_id": blog_id})
+    return {
+        "status_code": STATUS["success"],
+        "message": "blog deleted successfully.",
+        "db_message": str(blog),
+        "url": url_for("blogs")
+    }
