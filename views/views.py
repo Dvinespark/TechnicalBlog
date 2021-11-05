@@ -1,4 +1,5 @@
 import datetime
+import random
 
 from flask import render_template, request, redirect, url_for, session
 from mongo.db_helper import MongoDB
@@ -264,30 +265,39 @@ def blog_list():
 
 
 def blog_create():
+    print("method called")
+    print(request.form)
     # db.SOME_COLLECTION.find().sort({"_id": -1}).limit(1)
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
-    last_blog_id = blog_coll.find({}, {"blog_id"}).sort({"_id": -1}).limit(1)[0]["blog_id"]
+    last_blog_id = 0
+    try:
+        last_blog_id = blog_coll.find({}, {"blog_id"}).sort("_id", -1).limit(1)[0]["blog_id"]
+    except Exception as e:
+        pass
     # do the logic to increment post_id
     blog_id = last_blog_id + 1
 
     current_user = session.get('username', None)
     login_flag = session.get('login_flag', False)
-    # check if user is logged in
-    if current_user and login_flag:
-        blog_coll.insert_one({
+    data = {
             "created_by": current_user,
             "updated_by": None,
-            "active": request.form['active'],
-            "small_description": request.form['small_description'],
-            "long_description": request.form['long_description'],
+            "active": request.form.get('active', False),
+            "title": request.form.get('title', None),
+            "short_description": request.form.get('short_description', None),
+            "long_description": request.form.get('long_description',None),
             "blog_id": blog_id,
-            "photo_url": request.form["photo_url"],
-            "blog_type": request.form["blog_type"],
-            "blog_tech": request.form["blog_technology"],
+            "photo_url": request.form.get("photo_url", None),
+            "blog_type": request.form.get("blog_type", None),
+            "blog_tech": request.form.get("blog_tech", None),
             "created_at": str(datetime.date.today()),
             "updated_at": None
-        })
+        }
+    print(data)
+    # check if user is logged in
+    if current_user and login_flag:
+        blog_coll.insert_one(data)
         return {
             "status_code": STATUS["success"],
             "message": "Blog created successfully.",
@@ -309,30 +319,43 @@ def blog_update():
 
     db = MongoDB()
     blog_id = request.form['blog_id']
+    active = request.form.get('active', True)
+    short_description = request.form.get('short_description', None)
+    long_description = request.form.get('long_description', None)
+    photo_url = request.form.get('photo_url', None)
+    blog_type = request.form.get('blog_type', "regular")
+    blog_tech = request.form.get('blog_tech', "all")
+    title = request.form.get('title', None)
     blog_coll = db.get_collection("blogs")
 
-    update_record = {}
-    if request.form['active'] is not None:
-        update_record["active"] = request.form['active']
+    update_record = {
+        "updated_by": current_user,
+        "updated_at": str(datetime.date.today())
+    }
+    if active is not None:
+        update_record["active"] = active
 
-    if request.form['small_description'] is not None:
-        update_record["small_description"] = request.form['small_description']
+    if short_description is not None:
+        update_record["short_description"] = short_description
 
     if request.form['long_description'] is not None:
-        update_record["long_description"] = request.form['long_description']
+        update_record["long_description"] = long_description
 
-    if request.form['photo_url'] is not None:
-        update_record["photo_url"] = request.form['photo_url']
+    if photo_url is not None:
+        update_record["photo_url"] = photo_url
 
-    if request.form['blog_type'] is not None:
-        update_record["blog_type"] = request.form['blog_type']
+    if blog_type is not None:
+        update_record["blog_type"] = blog_type
 
-    if request.form['blog_technology'] is not None:
-        update_record["blog_technology"] = request.form['blog_technology']
+    if blog_tech is not None:
+        update_record["blog_tech"] = blog_tech
+
+    if title is not None:
+        update_record["title"] = title
 
     # check if user is logged in
     if current_user and login_flag:
-        output = blog_coll.update_many({"blog_id": blog_id}, update_record)
+        output = blog_coll.update_one({"blog_id": blog_id}, update_record)
         return {
             "status_code": STATUS["success"],
             "message": "Blog updated successfully.",
@@ -349,8 +372,9 @@ def blog_update():
 
 
 def blog_delete():
-
     blog_id = request.form['blog_id']
+    print("blog delete method beign called")
+    print(blog_id)
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
     blog = blog_coll.find_one_and_delete({"blog_id": blog_id})
