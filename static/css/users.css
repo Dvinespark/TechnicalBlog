@@ -184,7 +184,7 @@
 	}
 	/* Modal styles */
 	.modal .modal-dialog {
-		max-width: 400px;
+		max-width: 1000px;
 	}
 	.modal .modal-header, .modal .modal-body, .modal .modal-footer {
 		padding: 20px 30px;
@@ -205,7 +205,7 @@
 		border-color: #dddddd;
 	}
 	.modal textarea.form-control {
-		resize: vertical;
+		resize: auto;
 	}
 	.modal .btn {
 		border-radius: 2px;

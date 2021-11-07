@@ -40,11 +40,24 @@ $(document).ready(function(){
             $.each($('#add_blog').serializeArray(), function (index, value) {
                 params[value.name] = params[value.name] ? params[value.name] || value.value : value.value;
             });
-            console.log(params);
+            let form_data = new FormData();
+            for(let key in params){
+                form_data.append(key, params[key]);
+            }
+            form_data.append('photo_url', $("#blog-image")[0].files[0]);
+            // form_data.append('file', $('#blog-image').prop('files')[0]);
+            // form_data.append('data', params);
+            // console.log(form_data);
+            // var form_data1 = new FormData();
+            // form_data1.append('file', $('#blog-image').prop('files')[0]);
+
             $.ajax({
                 type: 'post',
                 url: "blogs/create",
-                data: params,
+                data: form_data,
+                processData: false,
+                contentType: false,
+                cache: false,
                 success: function (response) {
                     console.log(response);
                     if(response.status_code){
@@ -90,14 +103,26 @@ $(document).ready(function(){
             let button = $(event.relatedTarget); // Button that triggered the modal
             let recipient = button.data('blogid'); // Extract info from data-* attributes
             let params = {};
-            $.each($('#add_blog').serializeArray(), function (index, value) {
+            $.each($('#edit_blog').serializeArray(), function (index, value) {
                 params[value.name] = params[value.name] ? params[value.name] || value.value : value.value;
             });
             params['blog_id'] = recipient;
+
+
+            let form_data = new FormData();
+            for(let key in params){
+                form_data.append(key, params[key]);
+            }
+            if ($("#blog-uimage")[0].files.length > 0) {
+                form_data.append('photo_url', $("#blog-uimage")[0].files[0]);
+            }
             $.ajax({
                 type: 'post',
                 url: "blogs/edit",
-                data: params,
+                data: form_data,
+                processData: false,
+                contentType: false,
+                cache: false,
                 success: function (response) {
                     console.log(response);
                     if(response.status_code){

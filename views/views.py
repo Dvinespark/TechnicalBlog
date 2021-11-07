@@ -1,8 +1,8 @@
 import datetime
-import random
-
 from flask import render_template, request, redirect, url_for, session
 from mongo.db_helper import MongoDB
+import os
+from werkzeug.utils import secure_filename
 
 STATUS = {
     "success": 200,
@@ -159,11 +159,11 @@ def register():
             "url": url_for("login")
         }
 
+
 # admin panel
 
 
 def admin():
-
     context = {
         "login_flag": False,
         "user_admin": False,
@@ -189,7 +189,7 @@ def users():
     current_user = session.get('username', None)
     db = MongoDB()
     user_coll = db.get_collection("user")
-    users = user_coll.find({'username': { "$ne": str(current_user) }})
+    users = user_coll.find({'username': {"$ne": str(current_user)}})
     context = {
         "login_flag": False,
         "user_admin": False,
@@ -215,6 +215,7 @@ def delete_user():
         "message": "user deleted successfully.",
         "url": url_for("users")
     }
+
 
 # Blog Part here
 
@@ -267,6 +268,7 @@ def blog_list():
 def blog_create():
     print("method called")
     print(request.form)
+    print(request.files)
     # db.SOME_COLLECTION.find().sort({"_id": -1}).limit(1)
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
@@ -281,19 +283,31 @@ def blog_create():
     current_user = session.get('username', None)
     login_flag = session.get('login_flag', False)
     data = {
-            "created_by": current_user,
-            "updated_by": None,
-            "active": request.form.get('active', False),
-            "title": request.form.get('title', None),
-            "short_description": request.form.get('short_description', None),
-            "long_description": request.form.get('long_description',None),
-            "blog_id": blog_id,
-            "photo_url": request.form.get("photo_url", None),
-            "blog_type": request.form.get("blog_type", None),
-            "blog_tech": request.form.get("blog_tech", None),
-            "created_at": str(datetime.date.today()),
-            "updated_at": None
-        }
+        "created_by": current_user,
+        "updated_by": None,
+        "active": request.form.get('active', False),
+        "title": request.form.get('title', None),
+        "short_description": request.form.get('short_description', None),
+        "long_description": request.form.get('long_description', None),
+        "blog_id": blog_id,
+        "photo_url": request.form.get("photo_url", None),
+        "blog_type": request.form.get("blog_type", None),
+        "blog_tech": request.form.get("blog_tech", None),
+        "created_at": str(datetime.date.today()),
+        "updated_at": None
+    }
+    if 'photo_url' in request.files:
+        file = request.files['photo_url']
+        import flask
+        file_name = secure_filename(file.filename)
+        file_name = file_name.split('.')[0].strip() + "_" + current_user + "_" + str(datetime.date.today()) + \
+                    "." + file_name.split('.')[1]
+        file.filename = file_name
+        file_path = os.path.join(flask.current_app.root_path, 'static', 'img', 'blog', file_name)
+        print(file_path)
+        file.save(file_path)
+
+        data['photo_url'] = file_name
     print(data)
     # check if user is logged in
     if current_user and login_flag:
@@ -313,20 +327,19 @@ def blog_create():
 
 
 def blog_update():
-
     current_user = session.get('username', None)
     login_flag = session.get('login_flag', False)
 
     db = MongoDB()
+    blog_coll = db.get_collection("blogs")
+
     blog_id = request.form['blog_id']
     active = request.form.get('active', True)
     short_description = request.form.get('short_description', None)
     long_description = request.form.get('long_description', None)
-    photo_url = request.form.get('photo_url', None)
     blog_type = request.form.get('blog_type', "regular")
     blog_tech = request.form.get('blog_tech', "all")
     title = request.form.get('title', None)
-    blog_coll = db.get_collection("blogs")
 
     update_record = {
         "updated_by": current_user,
@@ -341,9 +354,6 @@ def blog_update():
     if request.form['long_description'] is not None:
         update_record["long_description"] = long_description
 
-    if photo_url is not None:
-        update_record["photo_url"] = photo_url
-
     if blog_type is not None:
         update_record["blog_type"] = blog_type
 
@@ -353,13 +363,26 @@ def blog_update():
     if title is not None:
         update_record["title"] = title
 
+    if 'photo_url' in request.files:
+        file = request.files['photo_url']
+        import flask
+        file_name = secure_filename(file.filename)
+        file_name = file_name.split('.')[0].strip() + "_" + current_user + "_" + str(datetime.date.today()) + \
+                    "." + file_name.split('.')[1]
+        file.filename = file_name
+        file_path = os.path.join(flask.current_app.root_path, 'static', 'img', 'blog', file_name)
+        print(file_path)
+        file.save(file_path)
+
+        update_record['photo_url'] = file_name
+    print(update_record)
     # check if user is logged in
     if current_user and login_flag:
-        output = blog_coll.update_one({"blog_id": blog_id}, update_record)
+        output = blog_coll.update({"blog_id": int(blog_id)}, {"$set": update_record})
+        print(output)
         return {
             "status_code": STATUS["success"],
             "message": "Blog updated successfully.",
-            "db_message": output,
             "url": url_for("blogs")
         }
 
@@ -372,12 +395,11 @@ def blog_update():
 
 
 def blog_delete():
-    blog_id = request.form['blog_id']
-    print("blog delete method beign called")
-    print(blog_id)
+    blog_id = int(request.form['blog_id'])
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
-    blog = blog_coll.find_one_and_delete({"blog_id": blog_id})
+    # blog = blog_coll.find_one_and_delete({"blog_id": int(blog_id)})
+    blog = blog_coll.delete_one({"blog_id": blog_id})
     return {
         "status_code": STATUS["success"],
         "message": "blog deleted successfully.",

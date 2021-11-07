@@ -3,6 +3,8 @@ from views import views
 from config import flask_secret_key
 
 app = Flask(__name__, static_url_path='/static')
+app.config["UPLOAD_FOLDER"] = "static/img/blog/"
+
 app.secret_key = flask_secret_key
 # / home page
 app.add_url_rule('/', 'index', view_func=views.index)
@@ -28,16 +30,18 @@ app.add_url_rule('/admin/users', 'users', view_func=views.users, methods=["GET"]
 app.add_url_rule('/admin/users/delete', 'delete-user', view_func=views.delete_user, methods=["POST"])
 
 
-# users
+# 1 blogs list
 app.add_url_rule('/admin/blogs', 'blogs', view_func=views.blog_list, methods=["GET"])
 
-# blogs
-
-# 1 create
+# 2 create
 app.add_url_rule('/admin/blogs/create', 'create-blog', view_func=views.blog_create, methods=["POST"])
 
-#2 delete
+# 3 delete
 app.add_url_rule('/admin/blogs/delete', 'delete-blog', view_func=views.blog_delete, methods=["POST"])
+
+# 4 update
+app.add_url_rule('/admin/blogs/edit', 'edit-blog', view_func=views.blog_update, methods=["POST"])
+
 
 if __name__ == "__main__":
     app.run(debug=True)
