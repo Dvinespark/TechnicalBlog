@@ -6,7 +6,7 @@ $(document).ready(function(){
         let data = {
             'blog_id': recipient
         };
-        $('#cancel_button').on('click', function (e) {
+        $('#d_cancel_button').on('click', function (e) {
             $('#deleteBlogModal').modal('toggle');
             return false;
         });
@@ -30,7 +30,7 @@ $(document).ready(function(){
 
 
     $('#addBlogModal').on('show.bs.modal', function (event) {
-        $('#cancel_button').on('click', function (e) {
+        $('#a_cancel_button').on('click', function (e) {
             $('#addBlogModal').modal('toggle');
             return false;
         });
@@ -75,7 +75,7 @@ $(document).ready(function(){
                 $('#blogEditActive').val($(this).is(':checked'));
         });
 
-        $('#cancel_button').on('click', function (e) {
+        $('#e_cancel_button').on('click', function (e) {
             $('#editBlogModal').modal('toggle');
             return false;
         });
