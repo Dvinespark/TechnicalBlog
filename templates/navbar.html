@@ -16,7 +16,7 @@
                                 <li><a href="#">Desktop</a></li>
                                 <li><a href="#">Electronics</a></li>
                                 <li><a href="./about.html">About</a></li>
-                                <li><a href="./contact.html">Contact</a></li>
+                                <li><a href="{{ url_for('contact') }}">Contact</a></li>
                                 {% if session["username"] %}
                                     <li><a href="{{url_for('logout')}}">Log Out</a></li>
                                 {% else %}
