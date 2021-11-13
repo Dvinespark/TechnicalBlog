@@ -42,6 +42,9 @@ app.add_url_rule('/admin/blogs/delete', 'delete-blog', view_func=views.blog_dele
 # 4 update
 app.add_url_rule('/admin/blogs/edit', 'edit-blog', view_func=views.blog_update, methods=["POST"])
 
+# /contact
+app.add_url_rule('/contact', 'contact', view_func=views.contact, methods=["GET"])
+
 
 if __name__ == "__main__":
     app.run(debug=True)

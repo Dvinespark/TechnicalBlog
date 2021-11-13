@@ -406,3 +406,7 @@ def blog_delete():
         "db_message": str(blog),
         "url": url_for("blogs")
     }
+
+
+def contact():
+    return render_template("contact.html", data={})
