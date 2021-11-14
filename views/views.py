@@ -410,3 +410,6 @@ def blog_delete():
 
 def contact():
     return render_template("contact.html", data={})
+
+def about():
+    return render_template("about.html", data={})
