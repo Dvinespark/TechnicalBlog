@@ -48,6 +48,10 @@ app.add_url_rule('/contact', 'contact', view_func=views.contact, methods=["GET"]
 # /about
 app.add_url_rule('/about', 'about', view_func=views.about, methods=["GET"])
 
+# 1 desktop_blogs list
+app.add_url_rule('/admin/desktop_blogs', 'desktop_blogs', view_func=views.blog_list, methods=["GET"])
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

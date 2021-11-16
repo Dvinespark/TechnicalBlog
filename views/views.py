@@ -413,3 +413,29 @@ def contact():
 
 def about():
     return render_template("about.html", data={})
+# 2 desktop_blog
+def desktop_blog_list():
+    # blog_data = {
+    #     "blog_id": password1,
+    #     "small_description": email,
+    #     "active": True,
+    #     "long_description": active,
+    #     "photo_url": fullname,
+    #     "blog_type": "feature",  # default type will be normal
+    #     "blog_technology": "mobile", # desktop, science, all
+    #     "inserted_date": today date,
+    #     "updated_date": None,
+    #     "created_by": username,
+    #     "updated_by": username
+    # }
+
+    # do the admin check if admin then do the following
+
+    db = MongoDB()
+    blog_coll = db.get_collection("blogs")
+    blogs = blog_coll.find({})#i have to change here
+    context = {
+        "blogs": blogs
+    }
+    return render_template("admin/desktop_blog.html", data=context)
+
