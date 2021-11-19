@@ -27,9 +27,29 @@ app.add_url_rule('/admin/users', 'users', view_func=views.users, methods=["GET"]
 # delete users
 app.add_url_rule('/admin/users/delete', 'delete-user', view_func=views.delete_user, methods=["POST"])
 
-
-# users
+# 1 blogs list
 app.add_url_rule('/admin/blogs', 'blogs', view_func=views.blog_list, methods=["GET"])
+
+# 2 create
+app.add_url_rule('/admin/blogs/create', 'create-blog', view_func=views.blog_create, methods=["POST"])
+
+# 3 delete
+app.add_url_rule('/admin/blogs/delete', 'delete-blog', view_func=views.blog_delete, methods=["POST"])
+
+# 4 update
+app.add_url_rule('/admin/blogs/edit', 'edit-blog', view_func=views.blog_update, methods=["POST"])
+
+# /contact
+app.add_url_rule('/contact', 'contact', view_func=views.contact, methods=["GET"])
+
+# /about
+app.add_url_rule('/about', 'about', view_func=views.about, methods=["GET"])
+
+# 1 desktop_blogs list
+app.add_url_rule('/admin/desktop_blogs', 'desktop_blogs', view_func=views.blog_list, methods=["GET"])
+
+# /mobile_blogs
+app.add_url_rule('/admin/mobile_blogs', 'mobile_blogs', view_func=views.blog_list, methods=["GET"])
 
 if __name__ == "__main__":
     app.run(debug=True)
