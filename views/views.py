@@ -1,5 +1,13 @@
+import datetime
 from flask import render_template, request, redirect, url_for, session
 from mongo.db_helper import MongoDB
+import os
+from werkzeug.utils import secure_filename
+
+STATUS = {
+    "success": 200,
+    "error": 404,
+}
 
 
 def index():
@@ -151,16 +159,17 @@ def register():
             "url": url_for("login")
         }
 
+
 # admin panel
 
 
 def admin():
-
     context = {
         "login_flag": False,
         "user_admin": False,
         "username": None
     }
+    # checks for admin
     login_flag = session.get('login_flag', False)
     username = session.get('username', None)
     admin_flag = session.get('admin_flag', False)
@@ -180,7 +189,7 @@ def users():
     current_user = session.get('username', None)
     db = MongoDB()
     user_coll = db.get_collection("user")
-    users = user_coll.find({'username': { "$ne": str(current_user) }})
+    users = user_coll.find({'username': {"$ne": str(current_user)}})
     context = {
         "login_flag": False,
         "user_admin": False,
@@ -207,6 +216,7 @@ def delete_user():
         "url": url_for("users")
     }
 
+
 # Blog Part here
 
 
@@ -231,31 +241,226 @@ def comment_delete():
 # 2 blog
 def blog_list():
     # blog_data = {
-    #     "username": username,
     #     "blog_id": password1,
     #     "small_description": email,
-    #     "active": user_type,
+    #     "active": True,
     #     "long_description": active,
-    #     "photo_url": fullname
+    #     "photo_url": fullname,
+    #     "blog_type": "feature",  # default type will be normal
+    #     "blog_technology": "mobile", # desktop, science, all
+    #     "inserted_date": today date,
+    #     "updated_date": None,
+    #     "created_by": username,
+    #     "updated_by": username
     # }
-    cuser = session.get('username', None)
+
+    # do the admin check if admin then do the following
+
     db = MongoDB()
-    user_coll = db.get_collection("user")
-    users = user_coll.find({'username': { "$ne": str(cuser) }})
+    blog_coll = db.get_collection("blogs")
+    blogs = blog_coll.find({})
     context = {
-        "login_flag": False,
-        "users": users
+        "blogs": blogs
     }
     return render_template("admin/blog.html", data=context)
 
 
 def blog_create():
-    pass
+    print("method called")
+    print(request.form)
+    print(request.files)
+    # db.SOME_COLLECTION.find().sort({"_id": -1}).limit(1)
+    db = MongoDB()
+    blog_coll = db.get_collection("blogs")
+    last_blog_id = 0
+    try:
+        last_blog_id = blog_coll.find({}, {"blog_id"}).sort("_id", -1).limit(1)[0]["blog_id"]
+    except Exception as e:
+        pass
+    # do the logic to increment post_id
+    blog_id = last_blog_id + 1
+
+    current_user = session.get('username', None)
+    login_flag = session.get('login_flag', False)
+    data = {
+        "created_by": current_user,
+        "updated_by": None,
+        "active": request.form.get('active', False),
+        "title": request.form.get('title', None),
+        "short_description": request.form.get('short_description', None),
+        "long_description": request.form.get('long_description', None),
+        "blog_id": blog_id,
+        "photo_url": request.form.get("photo_url", None),
+        "blog_type": request.form.get("blog_type", None),
+        "blog_tech": request.form.get("blog_tech", None),
+        "created_at": str(datetime.date.today()),
+        "updated_at": None
+    }
+    if 'photo_url' in request.files:
+        file = request.files['photo_url']
+        import flask
+        file_name = secure_filename(file.filename)
+        file_name = file_name.split('.')[0].strip() + "_" + current_user + "_" + str(datetime.date.today()) + \
+                    "." + file_name.split('.')[1]
+        file.filename = file_name
+        file_path = os.path.join(flask.current_app.root_path, 'static', 'img', 'blog', file_name)
+        print(file_path)
+        file.save(file_path)
+
+        data['photo_url'] = file_name
+    print(data)
+    # check if user is logged in
+    if current_user and login_flag:
+        blog_coll.insert_one(data)
+        return {
+            "status_code": STATUS["success"],
+            "message": "Blog created successfully.",
+            "url": url_for("blogs")
+        }
+
+    else:
+        return {
+            "status_code": STATUS["error"],
+            "message": "Sorry something went wrong. Please try again later.",
+            "url": url_for("blogs")
+        }
 
 
 def blog_update():
-    pass
+    current_user = session.get('username', None)
+    login_flag = session.get('login_flag', False)
+
+    db = MongoDB()
+    blog_coll = db.get_collection("blogs")
+
+    blog_id = request.form['blog_id']
+    active = request.form.get('active', True)
+    short_description = request.form.get('short_description', None)
+    long_description = request.form.get('long_description', None)
+    blog_type = request.form.get('blog_type', "regular")
+    blog_tech = request.form.get('blog_tech', "all")
+    title = request.form.get('title', None)
+
+    update_record = {
+        "updated_by": current_user,
+        "updated_at": str(datetime.date.today())
+    }
+    if active is not None:
+        update_record["active"] = active
+
+    if short_description is not None:
+        update_record["short_description"] = short_description
+
+    if request.form['long_description'] is not None:
+        update_record["long_description"] = long_description
+
+    if blog_type is not None:
+        update_record["blog_type"] = blog_type
+
+    if blog_tech is not None:
+        update_record["blog_tech"] = blog_tech
+
+    if title is not None:
+        update_record["title"] = title
+
+    if 'photo_url' in request.files:
+        file = request.files['photo_url']
+        import flask
+        file_name = secure_filename(file.filename)
+        file_name = file_name.split('.')[0].strip() + "_" + current_user + "_" + str(datetime.date.today()) + \
+                    "." + file_name.split('.')[1]
+        file.filename = file_name
+        file_path = os.path.join(flask.current_app.root_path, 'static', 'img', 'blog', file_name)
+        print(file_path)
+        file.save(file_path)
+
+        update_record['photo_url'] = file_name
+    print(update_record)
+    # check if user is logged in
+    if current_user and login_flag:
+        output = blog_coll.update({"blog_id": int(blog_id)}, {"$set": update_record})
+        print(output)
+        return {
+            "status_code": STATUS["success"],
+            "message": "Blog updated successfully.",
+            "url": url_for("blogs")
+        }
+
+    else:
+        return {
+            "status_code": STATUS["error"],
+            "message": "Sorry something went wrong. Please try again later.",
+            "url": url_for("blogs")
+        }
 
 
 def blog_delete():
-    pass
+    blog_id = int(request.form['blog_id'])
+    db = MongoDB()
+    blog_coll = db.get_collection("blogs")
+    # blog = blog_coll.find_one_and_delete({"blog_id": int(blog_id)})
+    blog = blog_coll.delete_one({"blog_id": blog_id})
+    return {
+        "status_code": STATUS["success"],
+        "message": "blog deleted successfully.",
+        "db_message": str(blog),
+        "url": url_for("blogs")
+    }
+
+
+def contact():
+    return render_template("contact.html", data={})
+
+def about():
+    return render_template("about.html", data={})
+# 2 desktop_blog
+def desktop_blog_list():
+    # blog_data = {
+    #     "blog_id": password1,
+    #     "small_description": email,
+    #     "active": True,
+    #     "long_description": active,
+    #     "photo_url": fullname,
+    #     "blog_type": "feature",  # default type will be normal
+    #     "blog_technology": "mobile", # desktop, science, all
+    #     "inserted_date": today date,
+    #     "updated_date": None,
+    #     "created_by": username,
+    #     "updated_by": username
+    # }
+
+    # do the admin check if admin then do the following
+
+    db = MongoDB()
+    blog_coll = db.get_collection("blogs")
+    blogs = blog_coll.find({})#i have to change here
+    context = {
+        "blogs": blogs
+    }
+     return render_template("admin/desktop_blog.html", data=context)
+    # 3 mobile_blogs
+def mobile_blogs_list():
+    # blog_data = {
+    #     "blog_id": password1,
+    #     "small_description": email,
+    #     "active": True,
+    #     "long_description": active,
+    #     "photo_url": fullname,
+    #     "blog_type": "feature",  # default type will be normal
+    #     "blog_technology": "mobile", # desktop, science, all
+    #     "inserted_date": today date,
+    #     "updated_date": None,
+    #     "created_by": username,
+    #     "updated_by": username
+    # }
+
+    # do the admin check if admin then do the following
+
+    db = MongoDB()
+    blog_coll = db.get_collection("blogs")
+    blogs = blog_coll.find({})#i have to change here
+    context = {
+        "blogs": blogs
+    }
+    return render_template("admin/mobile_blogs.html", data=context)
+   
