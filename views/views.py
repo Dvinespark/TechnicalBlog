@@ -407,9 +407,84 @@ def blog_delete():
         "url": url_for("blogs")
     }
 
+# /admin/emails
+
+
+def admin_emails():
+    db = MongoDB()
+    contact_coll = db.get_collection("contacts")
+    emails = contact_coll.find({"responded": False})
+    context = {
+        "emails": emails
+    }
+    return render_template("admin/emails.html", data=context)
+
+
+def admin_emails_update():
+    current_user = session.get('username', None)
+    login_flag = session.get('login_flag', False)
+
+    db = MongoDB()
+    contacts_coll = db.get_collection("contacts")
+
+    id = request.form['id']
+    responded = request.form.get('responded', 'false')
+    if responded == 'false':
+        responded = False
+    else:
+        responded = True
+    update_record = {
+        "updated_at": str(datetime.date.today())
+    }
+    if responded is not None:
+        update_record["responded"] = responded
+
+
+    # check if user is logged in
+    if current_user and login_flag:
+        output = contacts_coll.update({"id": int(id)}, {"$set": update_record})
+        print(output)
+        return {
+            "status_code": STATUS["success"],
+            "message": "Record updated successfully.",
+            "url": url_for("admin-email")
+        }
+
+    else:
+        return {
+            "status_code": STATUS["error"],
+            "message": "Sorry something went wrong. Please try again later.",
+            "url": url_for("admin-email")
+        }
+
 
 def contact():
-    return render_template("contact.html", data={})
+    message = None
+    if request.method == "POST":
+        db = MongoDB()
+        blog_coll = db.get_collection("contacts")
+        last_inserted_id = 0
+        try:
+            last_inserted_id = blog_coll.find({}, {"id"}).sort("_id", -1).limit(1)[0]["id"]
+        except Exception as e:
+            pass
+        # do the logic to increment post_id
+        contact_id = last_inserted_id + 1
+        data = {
+            "id": contact_id,
+            "name": request.form.get('name', ''),
+            "email": request.form.get('email', ''),
+            "message": request.form.get('message'),
+            "created_at": str(datetime.date.today()),
+            "updated_at": '',
+            "responded": False
+        }
+        blog_coll.insert_one(data)
+        message = 'Your query has been submitted. Please allow our admins to reply in few hours!'
+        return render_template("contact.html", data={'message': message})
+
+    return render_template("contact.html", data={'message': message})
+
 
 def about():
     return render_template("about.html", data={})

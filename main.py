@@ -42,8 +42,15 @@ app.add_url_rule('/admin/blogs/delete', 'delete-blog', view_func=views.blog_dele
 # 4 update
 app.add_url_rule('/admin/blogs/edit', 'edit-blog', view_func=views.blog_update, methods=["POST"])
 
+# 5 admin Emails list
+app.add_url_rule('/admin/emails', 'admin-email', view_func=views.admin_emails, methods=["GET"])
+
+# admin email update
+
+app.add_url_rule('/admin/emails/edit', 'email-update', view_func=views.admin_emails_update, methods=["POST"])
+
 # /contact
-app.add_url_rule('/contact', 'contact', view_func=views.contact, methods=["GET"])
+app.add_url_rule('/contact', 'contact', view_func=views.contact, methods=["GET", "POST"])
 
 # /about
 app.add_url_rule('/about', 'about', view_func=views.about, methods=["GET"])
