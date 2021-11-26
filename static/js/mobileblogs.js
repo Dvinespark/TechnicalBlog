@@ -53,7 +53,7 @@ $(document).ready(function(){
 
             $.ajax({
                 type: 'post',
-                url: "blogs/create",
+                url: "mobile_blogs/create",
                 data: form_data,
                 processData: false,
                 contentType: false,
