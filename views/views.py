@@ -239,7 +239,7 @@ def comment_delete():
 
 
 # 2 blog
-def blog_list():
+def mobile_blogs_list():
     # blog_data = {
     #     "blog_id": password1,
     #     "small_description": email,
@@ -265,7 +265,7 @@ def blog_list():
     return render_template("admin/blog.html", data=context)
 
 
-def blog_create():
+def mobile_blogs_create():
     print("method called")
     print(request.form)
     print(request.files)
@@ -326,7 +326,7 @@ def blog_create():
         }
 
 
-def blog_update():
+def mobile_blogs_update():
     current_user = session.get('username', None)
     login_flag = session.get('login_flag', False)
 
@@ -394,7 +394,7 @@ def blog_update():
         }
 
 
-def blog_delete():
+def mobile_blogs_delete():
     blog_id = int(request.form['blog_id'])
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
@@ -408,37 +408,7 @@ def blog_delete():
     }
 
 
-def contact():
-    return render_template("contact.html", data={})
-
-def about():
-    return render_template("about.html", data={})
-# 2 desktop_blog
-def desktop_blog_list():
-    # blog_data = {
-    #     "blog_id": password1,
-    #     "small_description": email,
-    #     "active": True,
-    #     "long_description": active,
-    #     "photo_url": fullname,
-    #     "blog_type": "feature",  # default type will be normal
-    #     "blog_technology": "mobile", # desktop, science, all
-    #     "inserted_date": today date,
-    #     "updated_date": None,
-    #     "created_by": username,
-    #     "updated_by": username
-    # }
-
-    # do the admin check if admin then do the following
-
-    db = MongoDB()
-    blog_coll = db.get_collection("blogs")
-    blogs = blog_coll.find({})#i have to change here
-    context = {
-        "blogs": blogs
-    }
-     return render_template("admin/desktop_blog.html", data=context)
-    # 3 mobile_blogs
+#3 mobile_blogs
 def mobile_blogs_list():
     # blog_data = {
     #     "blog_id": password1,
@@ -458,7 +428,7 @@ def mobile_blogs_list():
 
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
-    blogs = blog_coll.find({"blog_technology":"mobile"}})#i have to change here
+    blogs = blog_coll.find({"blog_technology":"mobile"}})
     context = {
         "blogs": blogs
     }
