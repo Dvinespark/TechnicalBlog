@@ -458,7 +458,7 @@ def mobile_blogs_list():
 
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
-    blogs = blog_coll.find({"blog_type":"mobile"}})#i have to change here
+    blogs = blog_coll.find({"blog_technology":"mobile"}})#i have to change here
     context = {
         "blogs": blogs
     }
