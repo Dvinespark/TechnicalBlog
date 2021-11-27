@@ -52,13 +52,23 @@ def index():
         item['day'] = item_date.day
         item['month'] = item_date.strftime("%b")
         regular_blog_list.append(item)
+
+    blog_count = collection.find({"blog_tech": "all"}).count()
+    mobile_blog_count = collection.find({"blog_tech": "mobile"}).count()
+    desktop_blog_count = collection.find({"blog_tech": "desktop"}).count()
+    electronics_blog_count = collection.find({"blog_tech": "electronics"}).count()
     context = {
         "login_flag": False,
         "user_admin": False,
         "username": None,
         "featured_blog": list(featured_blog_list),
         "top_blog": list(top_blog_list),
-        "regular_blog": list(regular_blog_list)
+        "regular_blog": list(regular_blog_list),
+        "blog_count": blog_count,
+        "mobile_blog_count": mobile_blog_count,
+        "desktop_blog_count": desktop_blog_count,
+        "electronics_blog_count": electronics_blog_count
+
     }
     login_flag = session.get('login_flag', False)
     username = session.get('username', None)
