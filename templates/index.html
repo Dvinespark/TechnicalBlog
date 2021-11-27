@@ -11,23 +11,19 @@
                     <div class="row">
                         <div class="col-lg-6 p-0">
                             <div class="hero__inside__item hero__inside__item--wide set-bg"
-                                data-setbg="static/img/hero/hero-1.jpg">
+                                data-setbg="{{url_for('static', filename='img/blog/' + data['featured_blog'].photo_url, )}}">
                                 <div class="hero__inside__item__text">
                                     <div class="hero__inside__item--meta">
-                                        <span>08</span>
-                                        <p>Aug</p>
+                                        <span>{{data['featured_blog'].day}}</span>
+                                        <p>{{data['featured_blog'].month}}</p>
                                     </div>
                                     <div class="hero__inside__item--text">
                                         <ul class="label">
-                                            <li>Vegan</li>
-                                            <li>Desserts</li>
+                                            <li>{{data['featured_blog'].title}}</li>
                                         </ul>
-                                        <h4>Vegan White Peach Mug Cobbler With CardamomVegan<br /> White Peach Mug
-                                            Cobbler With Cardamom</h4>
+                                        <h4>{{data['featured_blog'].short_description}}</h4>
                                         <ul class="widget">
-                                            <li>by <span>Admin</span></li>
-                                            <li>3 min read</li>
-                                            <li>20 Comment</li>
+                                            <li>by <span>{{data['featured_blog'].created_by}}</span></li>
                                         </ul>
                                     </div>
                                 </div>

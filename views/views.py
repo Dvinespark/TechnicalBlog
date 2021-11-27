@@ -25,10 +25,24 @@ def index():
     # result = collection.find({})
     # for document in result:
     #     print(document)
+
+    # start passing data to UI
+    db = MongoDB()
+    collection = db.get_collection("blogs")
+    featured_blog = collection.find_one({"blog_type": "featured"})
+    featured_blog_date = datetime.datetime.fromisoformat(featured_blog['created_at'])
+    featured_blog['day'] = featured_blog_date.day
+    featured_blog['month'] = featured_blog_date.strftime("%b")
+    print(featured_blog)
+    top_blog = collection.find({"blog_type": "top"}).limit(2)
+    regular_blog = collection.find({"blog_type": "regular"}).limit(1)
     context = {
         "login_flag": False,
         "user_admin": False,
-        "username": None
+        "username": None,
+        "featured_blog": featured_blog,
+        "top_blog": top_blog,
+        "regular_blog": regular_blog
     }
     login_flag = session.get('login_flag', False)
     username = session.get('username', None)
