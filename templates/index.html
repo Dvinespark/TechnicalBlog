@@ -11,7 +11,7 @@
                     <div class="row">
                         <div class="col-lg-6 p-0">
                             <div class="hero__inside__item hero__inside__item--wide set-bg"
-                                data-setbg="{{url_for('static', filename='img/blog/' + data['featured_blog'][0].photo_url, )}}">
+                                data-setbg="{{url_for('static', filename='img/blog/' + data['featured_blog'][0].photo_url)}}">
                                 <div class="hero__inside__item__text">
                                     <div class="hero__inside__item--meta">
                                         <span>{{data['featured_blog'][0].day}}</span>
@@ -30,52 +30,37 @@
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6  p-0">
-                            <div class="hero__inside__item hero__inside__item--small set-bg"
-                                data-setbg="static/img/hero/hero-2.jpg">
-                                <div class="hero__inside__item__text">
-                                    <div class="hero__inside__item--meta">
-                                        <span>08</span>
-                                        <p>Aug</p>
-                                    </div>
-                                    <div class="hero__inside__item--text">
-                                        <ul class="label">
-                                            <li>Vegan</li>
-                                            <li>Desserts</li>
-                                        </ul>
-                                        <h5>How to Make a Milkshake With Any <br />Ice Cream, Any Toppings...</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="hero__inside__item hero__inside__item--small set-bg"
-                                data-setbg="static/img/hero/hero-3.jpg">
-                                <div class="hero__inside__item__text">
-                                    <div class="hero__inside__item--meta">
-                                        <span>08</span>
-                                        <p>Aug</p>
-                                    </div>
-                                    <div class="hero__inside__item--text">
-                                        <ul class="label">
-                                            <li>Vegan</li>
-                                            <li>Desserts</li>
-                                        </ul>
-                                        <h5>Vintage Copper Preserve Pan with <br />Brass Handles, Mid 19th Century</h5>
+                            {% for item in data['top_blog'][:2] %}
+                                <div class="hero__inside__item hero__inside__item--small set-bg"
+                                     data-setbg="{{url_for('static', filename='img/blog/' + item.photo_url)}}">
+                                    <div class="hero__inside__item__text">
+                                        <div class="hero__inside__item--meta">
+                                            <span>{{item.day}}</span>
+                                            <p>{{item.month}}</p>
+                                        </div>
+                                        <div class="hero__inside__item--text">
+                                            <ul class="label">
+                                                <li>{{item.title}}</li>
+                                            </ul>
+                                            <h5>{{item.short_description}}</h5>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            {% endfor %}
                         </div>
                         <div class="col-lg-3 col-md-6  p-0">
-                            <div class="hero__inside__item set-bg" data-setbg="static/img/hero/hero-4.jpg">
+                            <div class="hero__inside__item set-bg"
+                                 data-setbg="{{url_for('static', filename='img/blog/' + data['regular_blog'][0].photo_url)}}">
                                 <div class="hero__inside__item__text">
                                     <div class="hero__inside__item--meta">
-                                        <span>08</span>
-                                        <p>Aug</p>
+                                        <span>{{data['regular_blog'][0].day}}</span>
+                                        <p>{{data['regular_blog'][0].month}}</p>
                                     </div>
                                     <div class="hero__inside__item--text">
                                         <ul class="label">
-                                            <li>Vegan</li>
-                                            <li>Desserts</li>
+                                            <li>{{data['regular_blog'][0].title}}</li>
                                         </ul>
-                                        <h5>Marinated Lentil Salad with Zucch <br />ini and Tomatoes</h5>
+                                        <h4>{{data['regular_blog'][0].short_description}}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -107,52 +92,37 @@
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 p-0">
+                            {% for item in data['top_blog'][2:] %}
                             <div class="hero__inside__item hero__inside__item--small set-bg"
-                                data-setbg="static/img/hero/hero-3.jpg">
+                                 data-setbg="{{url_for('static', filename='img/blog/' + item.photo_url)}}">
                                 <div class="hero__inside__item__text">
                                     <div class="hero__inside__item--meta">
-                                        <span>08</span>
-                                        <p>Aug</p>
+                                        <span>{{item.day}}</span>
+                                        <p>{{item.month}}</p>
                                     </div>
                                     <div class="hero__inside__item--text">
                                         <ul class="label">
-                                            <li>Vegan</li>
-                                            <li>Desserts</li>
+                                            <li>{{item.title}}</li>
                                         </ul>
-                                        <h5>How to Make a Milkshake With Any <br />Ice Cream, Any Toppings...</h5>
+                                        <h5>{{item.short_description}}</h5>
                                     </div>
                                 </div>
                             </div>
-                            <div class="hero__inside__item hero__inside__item--small set-bg"
-                                data-setbg="static/img/hero/hero-2.jpg">
-                                <div class="hero__inside__item__text">
-                                    <div class="hero__inside__item--meta">
-                                        <span>08</span>
-                                        <p>Aug</p>
-                                    </div>
-                                    <div class="hero__inside__item--text">
-                                        <ul class="label">
-                                            <li>Vegan</li>
-                                            <li>Desserts</li>
-                                        </ul>
-                                        <h5>Vintage Copper Preserve Pan with <br />Brass Handles, Mid 19th Century</h5>
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                         <div class="col-lg-3 col-md-6 p-0">
-                            <div class="hero__inside__item set-bg" data-setbg="static/img/hero/hero-4.jpg">
+                            <div class="hero__inside__item set-bg"
+                                 data-setbg="{{url_for('static', filename='img/blog/' + data['regular_blog'][1].photo_url)}}">
                                 <div class="hero__inside__item__text">
                                     <div class="hero__inside__item--meta">
-                                        <span>08</span>
-                                        <p>Aug</p>
+                                        <span>{{data['regular_blog'][1].day}}</span>
+                                        <p>{{data['regular_blog'][1].month}}</p>
                                     </div>
                                     <div class="hero__inside__item--text">
                                         <ul class="label">
-                                            <li>Vegan</li>
-                                            <li>Desserts</li>
+                                            <li>{{data['regular_blog'][1].title}}</li>
                                         </ul>
-                                        <h5>Marinated Lentil Salad with Zucch <br />ini and Tomatoes</h5>
+                                        <h4>{{data['regular_blog'][1].short_description}}</h4>
                                     </div>
                                 </div>
                             </div>

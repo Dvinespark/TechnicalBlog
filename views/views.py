@@ -36,15 +36,29 @@ def index():
         item['day'] = item_date.day
         item['month'] = item_date.strftime("%b")
         featured_blog_list.append(item)
-    top_blog = collection.find({"blog_type": "top"}).limit(2)
-    regular_blog = collection.find({"blog_type": "regular"}).limit(1)
+
+    top_blog_list = []
+    top_blog = collection.find({"blog_type": "top"}).sort("_id", -1).limit(4)
+    for item in top_blog:
+        item_date = datetime.datetime.fromisoformat(item['created_at'])
+        item['day'] = item_date.day
+        item['month'] = item_date.strftime("%b")
+        top_blog_list.append(item)
+
+    regular_blog_list = []
+    regular_blog = collection.find({"blog_type": "regular"}).sort("_id", -1).limit(2)
+    for item in regular_blog:
+        item_date = datetime.datetime.fromisoformat(item['created_at'])
+        item['day'] = item_date.day
+        item['month'] = item_date.strftime("%b")
+        regular_blog_list.append(item)
     context = {
         "login_flag": False,
         "user_admin": False,
         "username": None,
         "featured_blog": list(featured_blog_list),
-        "top_blog": top_blog,
-        "regular_blog": regular_blog
+        "top_blog": list(top_blog_list),
+        "regular_blog": list(regular_blog_list)
     }
     login_flag = session.get('login_flag', False)
     username = session.get('username', None)
