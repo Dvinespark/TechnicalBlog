@@ -29,11 +29,11 @@ def index():
     # start passing data to UI
     db = MongoDB()
     collection = db.get_collection("blogs")
-    featured_blog = collection.find_one({"blog_type": "featured"})
-    featured_blog_date = datetime.datetime.fromisoformat(featured_blog['created_at'])
-    featured_blog['day'] = featured_blog_date.day
-    featured_blog['month'] = featured_blog_date.strftime("%b")
-    print(featured_blog)
+    featured_blog = collection.find({"blog_type": "featured"}).sort("_id", -1).limit(2)
+    for item in featured_blog:
+        item_date = datetime.datetime.fromisoformat(item['created_at'])
+        item['day'] = item_date.day
+        item['month'] = item_date.strftime("%b")
     top_blog = collection.find({"blog_type": "top"}).limit(2)
     regular_blog = collection.find({"blog_type": "regular"}).limit(1)
     context = {
