@@ -30,17 +30,19 @@ def index():
     db = MongoDB()
     collection = db.get_collection("blogs")
     featured_blog = collection.find({"blog_type": "featured"}).sort("_id", -1).limit(2)
+    featured_blog_list = []
     for item in featured_blog:
         item_date = datetime.datetime.fromisoformat(item['created_at'])
         item['day'] = item_date.day
         item['month'] = item_date.strftime("%b")
+        featured_blog_list.append(item)
     top_blog = collection.find({"blog_type": "top"}).limit(2)
     regular_blog = collection.find({"blog_type": "regular"}).limit(1)
     context = {
         "login_flag": False,
         "user_admin": False,
         "username": None,
-        "featured_blog": featured_blog,
+        "featured_blog": list(featured_blog_list),
         "top_blog": top_blog,
         "regular_blog": regular_blog
     }
