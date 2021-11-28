@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %} Tech-Detail | TechBlog {% endblock title %}
+
+{% block body %}
+
+    <section class="single-post spad">
+        <div class="single-post__hero set-bg"
+             data-setbg="{{url_for('static', filename='img/blog/' + data['blog'].photo_url)}}">
+        </div>
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-8">
+                    <div class="single-post__title">
+                        <div class="single-post__title__meta">
+                            <h2>{{data['blog'].day}}</h2>
+                            <span>{{data['blog'].month}}</span>
+                        </div>
+                        <div class="single-post__title__text">
+                            <ul class="label">
+                                {{data['blog'].title}}
+                            </ul>
+                            <h4>{{data['blog'].short_description}}</h4>
+                            <ul class="widget">
+                                <li>by {{data['blog'].created_by}}</li>
+                                <li>20 Comment</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="single-post__social__item">
+                        <ul>
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                            <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="single-post__middle__text">
+                        <p>{{data['blog'].long_description}}</p>
+                    </div>
+                    <div class="single-post__comment">
+                        <div class="widget__title">
+                            <h4>03 Comment</h4>
+                        </div>
+                        <div class="single-post__comment__item">
+                            <div class="single-post__comment__item__text">
+                                <h5>Brandon Kelley</h5>
+                                <span>15 Aug 2017</span>
+                                <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
+                                    adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore
+                                    magnam.</p>
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-share-square-o"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% if session["login_flag"] %}
+
+                        <div class="single-post__leave__comment">
+                            <div class="widget__title">
+                                <h4>Leave a comment</h4>
+                            </div>
+                            <form action="#">
+                                <div class="input-list">
+                                    <input type="text" placeholder="Name">
+                                    <input type="text" placeholder="Email">
+                                    <input type="text" placeholder="Website">
+                                </div>
+                                <textarea placeholder="Message"></textarea>
+                                <button type="submit" class="site-btn">Submit</button>
+                            </form>
+                        </div>
+                    {% else %}
+                    <div class="single-post__leave__comment">
+                        <div class="widget__title">
+                            <h3>Please login to comment!</h3>
+                            <h4><a href="{{url_for('login')}}">Click here to Login!</a></h4>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock body %}

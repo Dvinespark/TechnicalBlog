@@ -178,30 +178,22 @@
                     <div class="col-lg-8 col-md-8">
                         <div class="categories__post__item categories__post__item--large">
                             <div class="categories__post__item__pic set-bg"
-                                data-setbg="static/img/categories/categories-post/cp-1.jpg">
+                                 data-setbg="{{url_for('static', filename='img/blog/' + data['featured_blog'][1].photo_url)}}">
                                 <div class="post__meta">
-                                    <h4>08</h4>
-                                    <span>Aug</span>
+                                    <h4>{{data['featured_blog'][1].day}}</h4>
+                                    <span>{{data['featured_blog'][1].month}}</span>
                                 </div>
                             </div>
                             <div class="categories__post__item__text">
                                 <ul class="post__label--large">
-                                    <li>Vegan</li>
-                                    <li>Desserts</li>
+                                    <li>{{data['featured_blog'][1].title}}</li>
                                 </ul>
-                                <h3><a href="#">The Absolute Best Way to Cook Steak Perfectly, According to Wayyy Too
-                                        Many Tests</a></h3>
+                                <h3><a href="{{ url_for('blog_detail', blog_id=data['featured_blog'][1].blog_id) }}">{{data['featured_blog'][1].short_description}}</a></h3>
                                 <ul class="post__widget">
-                                    <li>by <span>Admin</span></li>
-                                    <li>3 min read</li>
-                                    <li>20 Comment</li>
+                                    <li>by <span>{{data['featured_blog'][1].created_by}}</span></li>
                                 </ul>
-                                <p>Dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                                    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur
-                                    excepteur sint ...</p>
-                                <a href="#" class="primary-btn">Read more</a>
+                                <p>{{data['featured_blog'][1].long_description | truncate(250)}}</p>
+                                <a href="{{ url_for('blog_detail', blog_id=data['featured_blog'][1].blog_id) }}" class="primary-btn">Read more</a>
                                 <div class="post__social">
                                     <span>Share</span>
                                     <a href="#"><i class="fa fa-facebook"></i> <span>82</span></a>
@@ -468,14 +460,10 @@
                                     <h6>Categories</h6>
                                 </div>
                                 <ul>
-                                    <li><a href="#">Recipes <span>128</span></a></li>
-                                    <li><a href="#">Dinner <span>32</span></a></li>
-                                    <li><a href="#">Dessert <span>86</span></a></li>
-                                    <li class="p-left"><a href="#">Smothie <span>25</span></a></li>
-                                    <li class="p-left"><a href="#">Drinks <span>36</span></a></li>
-                                    <li class="p-left"><a href="#">Cakes <span>15</span></a></li>
-                                    <li><a href="#">Vegan <span>63</span></a></li>
-                                    <li><a href="#">Weightloss <span>27</span></a></li>
+                                    <li><a href="#">All <span>{{data['blog_count']}}</span></a></li>
+                                    <li><a href="#">Mobile <span>{{data['mobile_blog_count']}}</span></a></li>
+                                    <li><a href="#">Desktop <span>{{data['desktop_blog_count']}}</span></a></li>
+                                    <li><a href="#">Electronics <span>{{data['electronics_blog_count']}}</span></a></li>
                                 </ul>
                             </div>
                             <div class="sidebar__subscribe__item">

@@ -57,6 +57,8 @@ def index():
     mobile_blog_count = collection.find({"blog_tech": "mobile"}).count()
     desktop_blog_count = collection.find({"blog_tech": "desktop"}).count()
     electronics_blog_count = collection.find({"blog_tech": "electronics"}).count()
+
+
     context = {
         "login_flag": False,
         "user_admin": False,
@@ -136,6 +138,7 @@ def logout():
     session["login_flag"] = False
     session["signup_flag"] = False
     session["signup_message"] = None
+    session["username"] = None
 
     return render_template("signin.html", data=context)
 
@@ -528,3 +531,20 @@ def contact():
 
 def about():
     return render_template("about.html", data={})
+
+
+def blog_detail(blog_id):
+
+    db = MongoDB()
+    blog_coll = db.get_collection("blogs")
+    blog = blog_coll.find_one({'blog_id': int(blog_id)})
+    item_date = datetime.datetime.fromisoformat(blog['created_at'])
+    blog['day'] = item_date.day
+    blog['month'] = item_date.strftime("%b")
+    context = {
+        "login_flag": False,
+        "user_admin": False,
+        "username": None,
+        "blog": blog
+    }
+    return render_template("blog_detail.html", data=context)

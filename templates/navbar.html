@@ -11,13 +11,13 @@
                     <div class="col-lg-8 col-md-10 order-md-2 order-3">
                         <nav class="header__menu">
                             <ul>
-                                <li class="active"><a href=".">Home</a></li>
+                                <li class="active"><a href="{{ url_for('index') }}">Home</a></li>
                                 <li><a href="#">Mobile</a></li>
                                 <li><a href="#">Desktop</a></li>
                                 <li><a href="#">Electronics</a></li>
                                 <li><a href="{{ url_for('about') }}">About</a></li>
                                 <li><a href="{{ url_for('contact') }}">Contact</a></li>
-                                {% if session["username"] %}
+                                {% if session["username"] and session["login_flag"] %}
                                     <li><a href="{{url_for('logout')}}">Log Out</a></li>
                                 {% else %}
                                     <li><a href="{{url_for('login')}}">Sign In</a></li>
@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-lg-2 col-md-1 col-6 order-md-3 order-2">
                         <div class="header__search">
-                            {% if session["username"] %}
+                            {% if session["username"] and session["login_flag"] %}
                                 Hey {{session["username"]}}!
                             {% endif %}
                         </div>
@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="header__logo">
-                        <a href="."><img src="static/img/logo.png" alt="Main logo"></a>
+                        <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="Main logo"></a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3">

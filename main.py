@@ -55,7 +55,8 @@ app.add_url_rule('/contact', 'contact', view_func=views.contact, methods=["GET",
 # /about
 app.add_url_rule('/about', 'about', view_func=views.about, methods=["GET"])
 
-
+# 5 blog detail
+app.add_url_rule('/blog/detail/<int:blog_id>', 'blog_detail', view_func=views.blog_detail, methods=["GET"])
 
 if __name__ == "__main__":
     app.run(debug=True)

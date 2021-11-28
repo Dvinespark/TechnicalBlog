@@ -6,20 +6,10 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li><a href="./index.html">Home</a></li>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
                 <li><a href="#">Mobile</a></li>
                 <li><a href="#">Laptop</a></li>
                 <li><a href="#">Electronics</a></li>
-                <li class="dropdown"><a href="#">Pages</a>
-                    <ul class="dropdown__menu">
-                        <li><a href="./categories-grid.html">Categories Grid</a></li>
-                        <li><a href="./categories-list.html">Categories List</a></li>
-                        <li><a href="./single-post.html">Single Post</a></li>
-                        <li><a href="./signin.html">Sign In</a></li>
-                        <li><a href="./404.html">404</a></li>
-                        <li><a href="./typography.html">Typography</a></li>
-                    </ul>
-                </li>
                 <li><a href="{{ url_for('about') }}">About</a></li>
                 <li><a href="{{ url_for('contact') }}">Contact</a></li>
             </ul>
@@ -27,12 +17,12 @@
         <div id="mobile-menu-wrap"></div>
         <div class="humberger__menu__about">
             <div class="humberger__menu__title sidebar__item__title">
-                <h6>About me</h6>
+                <h6>About us</h6>
             </div>
-            <img src="static/img/humberger/humberger-about.jpg" alt="">
-            <h6>Hi every one! I,m Lena Mollein.</h6>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua.</p>
+            <img src="{{ url_for('static', filename='img/humberger/humberger-about.jpg') }}" alt="">
+            <h6>Hi every one! We are Techno bloggies.</h6>
+            <p>This website is the output of our efforts required to present you how the technology advances in the future<br /> We are a group of enthusiasts fuelled by hard work & passion.
+                You can reach out to us with your enquiries & we'll get back to you at the earliest. </p>
             <div class="humberger__menu__about__social sidebar__item__follow__links">
                 <a href="#"><i class="fa fa-facebook"></i></a>
                 <a href="#"><i class="fa fa-twitter"></i></a>
@@ -46,15 +36,6 @@
                 <h6>Subscribe</h6>
             </div>
             <p>Subscribe to our newsletter and get our newest updates right on your inbox.</p>
-            <form action="#">
-                <input type="text" class="email-input" placeholder="Your email">
-                <label for="agree-check">
-                    I agree to the terms & conditions
-                    <input type="checkbox" id="agree-check">
-                    <span class="checkmark"></span>
-                </label>
-                <button type="submit" class="site-btn">Subscribe</button>
-            </form>
         </div>
     </div>
     <!-- Humberger End -->
