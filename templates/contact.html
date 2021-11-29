@@ -46,24 +46,16 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="contact__form">
                             <div class="contact__form__title">
-                                {% if data['message'] %}
-                                    <h2 style="color: darkgreen;">{{ data['message'] }}</h2>
-                                {% else %}
-                                    <h2>GET IN TOUCH</h2>
-                                    <p>Drop us a line. We're here to help</p>
-                                {% endif %}
+                                <h2>GET IN TOUCH</h2>
+                                <p>Drop us a line. We're here to help</p>
                             </div>
-
-                            {% if data['message'] %}
-                            <h2 style="color: green;">Submitted!!!</h2>
-                            {% else %}
-                            <form id="contact_form" method="post" action="{{url_for('contact')}}">
-                                <input type="text" placeholder="Name" name="name">
-                                <input type="text" placeholder="Email" name="email">
-                                <textarea placeholder="Message" name="message"></textarea>
-                                <button type="submit" class="site-btn" id="contact_submit-button">Submit</button>
+                            <form action="#">
+                                <input type="text" placeholder="Name">
+                                <input type="text" placeholder="Email">
+                                <input type="text" placeholder="Website">
+                                <textarea placeholder="Message"></textarea>
+                                <button type="submit" class="site-btn">Submit</button>
                             </form>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -71,10 +63,5 @@
         </div>
     </section>
     <!-- Contact Section End -->
+
 {% endblock body %}
-
-{% block script %}
-<script src="static/js/contact.js"></script>
-{% endblock script %}
-
-
