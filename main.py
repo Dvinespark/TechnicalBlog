@@ -55,8 +55,21 @@ app.add_url_rule('/contact', 'contact', view_func=views.contact, methods=["GET",
 # /about
 app.add_url_rule('/about', 'about', view_func=views.about, methods=["GET"])
 
-# 5 blog detail
-app.add_url_rule('/blog/detail/<int:blog_id>', 'blog_detail', view_func=views.blog_detail, methods=["GET"])
+
+# /desktop_blogs
+app.add_url_rule('/admin/desktop_blogs', 'desktop_blogs', view_func=views.desktop_blogs_list, methods=["GET"])
+
+# 2 create
+app.add_url_rule('/admin/desktop_blogs/create', 'create-desktop_blogs', view_func=views.desktop_blogs_create, methods=["POST"])
+
+# 3 delete
+app.add_url_rule('/admin/desktop_blogs/delete', 'delete-desktop_blogs', view_func=views.desktop_blogs_delete, methods=["POST"])
+
+# 4 update
+app.add_url_rule('/admin/desktop_blogs/edit', 'edit-desktop_blogs', view_func=views.desktop_blogs_update, methods=["POST"])
+
+
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True )
