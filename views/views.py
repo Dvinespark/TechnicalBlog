@@ -25,10 +25,52 @@ def index():
     # result = collection.find({})
     # for document in result:
     #     print(document)
+
+    # start passing data to UI
+    db = MongoDB()
+    collection = db.get_collection("blogs")
+    featured_blog = collection.find({"blog_type": "featured"}).sort("_id", -1).limit(2)
+    featured_blog_list = []
+    for item in featured_blog:
+        item_date = datetime.datetime.fromisoformat(item['created_at'])
+        item['day'] = item_date.day
+        item['month'] = item_date.strftime("%b")
+        featured_blog_list.append(item)
+
+    top_blog_list = []
+    top_blog = collection.find({"blog_type": "top"}).sort("_id", -1).limit(4)
+    for item in top_blog:
+        item_date = datetime.datetime.fromisoformat(item['created_at'])
+        item['day'] = item_date.day
+        item['month'] = item_date.strftime("%b")
+        top_blog_list.append(item)
+
+    regular_blog_list = []
+    regular_blog = collection.find({"blog_type": "regular"}).sort("_id", -1).limit(2)
+    for item in regular_blog:
+        item_date = datetime.datetime.fromisoformat(item['created_at'])
+        item['day'] = item_date.day
+        item['month'] = item_date.strftime("%b")
+        regular_blog_list.append(item)
+
+    blog_count = collection.find({"blog_tech": "all"}).count()
+    mobile_blog_count = collection.find({"blog_tech": "mobile"}).count()
+    desktop_blog_count = collection.find({"blog_tech": "desktop"}).count()
+    electronics_blog_count = collection.find({"blog_tech": "electronics"}).count()
+
+
     context = {
         "login_flag": False,
         "user_admin": False,
-        "username": None
+        "username": None,
+        "featured_blog": list(featured_blog_list),
+        "top_blog": list(top_blog_list),
+        "regular_blog": list(regular_blog_list),
+        "blog_count": blog_count,
+        "mobile_blog_count": mobile_blog_count,
+        "desktop_blog_count": desktop_blog_count,
+        "electronics_blog_count": electronics_blog_count
+
     }
     login_flag = session.get('login_flag', False)
     username = session.get('username', None)
@@ -96,6 +138,7 @@ def logout():
     session["login_flag"] = False
     session["signup_flag"] = False
     session["signup_message"] = None
+    session["username"] = None
 
     return render_template("signin.html", data=context)
 
@@ -653,3 +696,18 @@ def mobile_blogs_delete():
         "url": url_for("mobile_blogs")
     }
 
+def blog_detail(blog_id):
+
+    db = MongoDB()
+    blog_coll = db.get_collection("blogs")
+    blog = blog_coll.find_one({'blog_id': int(blog_id)})
+    item_date = datetime.datetime.fromisoformat(blog['created_at'])
+    blog['day'] = item_date.day
+    blog['month'] = item_date.strftime("%b")
+    context = {
+        "login_flag": False,
+        "user_admin": False,
+        "username": None,
+        "blog": blog
+    }
+    return render_template("blog_detail.html", data=context)
