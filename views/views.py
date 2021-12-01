@@ -29,7 +29,7 @@ def index():
     # start passing data to UI
     db = MongoDB()
     collection = db.get_collection("blogs")
-    featured_blog = collection.find({"blog_type": "featured"}).sort("_id", -1).limit(2)
+    featured_blog = collection.find({"blog_type": "featured"}).sort("_id", -1).limit(6)
     featured_blog_list = []
     for item in featured_blog:
         item_date = datetime.datetime.fromisoformat(item['created_at'])
@@ -52,8 +52,14 @@ def index():
         item['day'] = item_date.day
         item['month'] = item_date.strftime("%b")
         regular_blog_list.append(item)
-
-    blog_count = collection.find({"blog_tech": "all"}).count()
+    blog_list = []
+    blogs = collection.find({})
+    blog_count = blogs.count()
+    for item in blogs:
+        item_date = datetime.datetime.fromisoformat(item['created_at'])
+        item['day'] = item_date.day
+        item['month'] = item_date.strftime("%b")
+        blog_list.append(item)
     mobile_blog_count = collection.find({"blog_tech": "mobile"}).count()
     desktop_blog_count = collection.find({"blog_tech": "desktop"}).count()
     electronics_blog_count = collection.find({"blog_tech": "electronics"}).count()
@@ -69,7 +75,8 @@ def index():
         "blog_count": blog_count,
         "mobile_blog_count": mobile_blog_count,
         "desktop_blog_count": desktop_blog_count,
-        "electronics_blog_count": electronics_blog_count
+        "electronics_blog_count": electronics_blog_count,
+        "blogs": blog_list
 
     }
     login_flag = session.get('login_flag', False)
