@@ -31,7 +31,6 @@
 		    <th style="display: none;">Long Description</th>
                 <th>Photo</th>
                 <th>Blog Type</th>
-                <th>Blog Tech</th>
 		    <th>Active</th>
 		    <th>Created By</th>
 		    <th>Created At</th>
@@ -47,12 +46,11 @@
 			    <img class="img-fluid img-thumbnail" style="width: 50px; height: 50px;" src="{{url_for('static', filename = 'img/blog/' +blog['photo_url'])}}" alt="">
 		    </td>
                 <td>{{blog['blog_type']}}</td>
-                <td>{{blog['blog_tech']}}</td>
                 <td>{{blog['active']}}</td>
 		    <td>{{blog['created_by']}}</td>
 		    <td>{{blog['created_at']}}</td>
                 <td>
-                    <a href="#editBlogModal" class="edit" data-toggle="modal"><i class="fas fa-edit" data-toggle="tooltip" title="Edit"></i></a>
+                    <a href="#editBlogModal" data-blogid="{{blog['blog_id']}}" class="edit" data-toggle="modal"><i class="fas fa-edit" data-toggle="tooltip" title="Edit"></i></a>
                     <a href="#deleteBlogModal" data-blogid="{{blog['blog_id']}}" class="delete" data-toggle="modal"><i class="fas fa-trash" data-toggle="tooltip" title="Delete"></i></a>
                 </td>
             </tr>
@@ -86,7 +84,7 @@
 					</div>
 					<div class="form-group">
 						<label>Upload photo</label>
-						<input type="text" class="form-control" name="photo_url" id="blog-image" required>
+						<input type="file" class="form-control" name="photo_url" id="blog-image" required>
 					</div>
 				<div class="form-group">
 					<label>Blog Type</label>
@@ -95,15 +93,6 @@
 						<option value="featured">Featured</option>
 						<option value="top">Top</option>
 						<option value="bottom">Bottom</option>
-						</select>
-					</div>
-					<div class="form-group">
-						<label>Blog Tech</label>
-						<select class="form-control" name="blog_tech">
-						<option value="all" selected>All</option>
-						<option value="mobile">Mobile</option>
-						<option value="desktop">Desktop</option>
-						<option value="technology">Technology</option>
 						</select>
 					</div>
 					<div class="form-group">
@@ -146,7 +135,7 @@
 					</div>
 					<div class="form-group">
 						<label>Upload Photo</label>
-						<input type="text" class="form-control" name="photo_url" id="blog-uimage">
+						<input type="file" class="form-control" name="photo_url" id="blog-uimage">
 					</div>
 					<div class="form-group">
 						<label>Blog Type</label>
@@ -158,15 +147,6 @@
 						</select>
 
 				</div>
-					<div class="form-group">
-						<label>Blog Tech</label>
-						<select class="form-control" name="blog_tech">
-							<option value="all" selected>All</option>
-							<option value="mobile">Mobile</option>
-							<option value="desktop">Desktop</option>
-							<option value="technology">Technology</option>
-						</select>
-					</div>
 					<div class="form-group">
 						<label>Active</label>
 						<input id="blogEditActive" type="checkbox" class="custom-checkbox" checked name="active">
@@ -187,7 +167,7 @@
         <div class="modal-content">
             <form action="">
                 <div class="modal-header">
-                    <h4 class="modal-title">Delete Blog</h4>
+                    <h4 class="modal-title">Delete Desktop Blog</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">

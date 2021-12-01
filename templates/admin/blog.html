@@ -28,13 +28,13 @@
             <tr>
                 <th>Title</th>
                 <th>Short Description</th>
-                <th style="display: none;">Long Description</th>
+		    <th style="display: none;">Long Description</th>
                 <th>Photo</th>
                 <th>Blog Type</th>
                 <th>Blog Tech</th>
-                <th>Active</th>
-                <th>Created By</th>
-                <th>Created At</th>
+		    <th>Active</th>
+		    <th>Created By</th>
+		    <th>Created At</th>
             </tr>
             </thead>
             <tbody>
@@ -42,17 +42,17 @@
             <tr>
                 <td>{{blog['title']}}</td>
                 <td>{{blog['short_description']}}</td>
-                <td style="display: none">{{blog['long_description']}}</td>
-                <td>
-                    <img class="img-fluid img-thumbnail" style="width: 50px; height: 50px;" src="{{url_for('static', filename = 'img/blog/' + blog['photo_url'])}}" alt="">
-                </td>
+		    <td style="display: none">{{blog['long_description']}}</td>
+		    <td>
+			    <img class="img-fluid img-thumbnail" style="width: 50px; height: 50px;" src="{{url_for('static', filename = 'img/blog/' +blog['photo_url'])}}" alt="">
+		    </td>
                 <td>{{blog['blog_type']}}</td>
                 <td>{{blog['blog_tech']}}</td>
                 <td>{{blog['active']}}</td>
-                <td>{{blog['created_by']}}</td>
-                <td>{{blog['created_at']}}</td>
+		    <td>{{blog['created_by']}}</td>
+		    <td>{{blog['created_at']}}</td>
                 <td>
-                    <a href="#editBlogModal" class="edit" data-toggle="modal" data-blogid="{{blog['blog_id']}}"><i class="fas fa-edit" data-toggle="tooltip" title="Edit"></i></a>
+                    <a href="#editBlogModal" class="edit" data-toggle="modal"><i class="fas fa-edit" data-toggle="tooltip" title="Edit"></i></a>
                     <a href="#deleteBlogModal" data-blogid="{{blog['blog_id']}}" class="delete" data-toggle="modal"><i class="fas fa-trash" data-toggle="tooltip" title="Delete"></i></a>
                 </td>
             </tr>
@@ -78,44 +78,45 @@
 					</div>
 					<div class="form-group">
 						<label>Short Description</label>
-						<input type="text" class="form-control" name="short_description" required>
+						<input type="email" class="form-control" name="short_description" required>
 					</div>
 					<div class="form-group">
 						<label>Long Description</label>
-						<textarea class="form-control" required name="long_description"></textarea>
+						<textarea class="form-control" name="long_description" required></textarea>
 					</div>
 					<div class="form-group">
 						<label>Upload photo</label>
-						<input type="file" class="form-control" name="photo_url" id="blog-image">
+						<input type="text" class="form-control" name="photo_url" id="blog-image" required>
 					</div>
-                    <div class="form-group">
-                        <label>Blog Type</label>
-                        <select class="form-control" aria-label="Default select example" name="blog_type">
-                            <option value="regular" selected>Regular</option>
-                            <option value="featured">Featured</option>
-                            <option value="top">Top</option>
-                            <option value="bottom">Bottom</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Blog Tech</label>
-                        <select class="form-control" name="blog_tech">
-                            <option value="all" selected>All</option>
-                            <option value="mobile">Mobile</option>
-                            <option value="desktop">Desktop</option>
-                            <option value="technology">Technology</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Active</label>
-                        <input type="checkbox" class="custom-checkbox" value="true" checked name="active">
-                        <input name="active" type="hidden" value="false" />
-                    </div>
+				<div class="form-group">
+					<label>Blog Type</label>
+						<select class="form-control" aria-label="ADefault select example" name="blog_type">
+						<option value="regular" selected>Regular</option>
+						<option value="featured">Featured</option>
+						<option value="top">Top</option>
+						<option value="bottom">Bottom</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Blog Tech</label>
+						<select class="form-control" name="blog_tech">
+						<option value="all" selected>All</option>
+						<option value="mobile">Mobile</option>
+						<option value="desktop">Desktop</option>
+						<option value="technology">Technology</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Active</label>
+					<input type="checkbox" class="custom-checkbox" value="true" checked name="active">
+					<input name="active" type="hidden" value="false"/>
+				</div>
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" id="a_cancel_button" data-dismiss="modal" value="Cancel">
 					<input type="submit" id="addblog_button" class="btn btn-success" value="Add">
 				</div>
+
 			</form>
 		</div>
 	</div>
@@ -125,57 +126,58 @@
 <div id="editBlogModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-            <form id="edit_blog">
-                <div class="modal-header">
-                    <h4 class="modal-title">Update Blog</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" class="form-control" name="title" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Short Description</label>
-                        <input type="text" class="form-control" name="short_description" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Long Description</label>
-                        <textarea class="form-control" required name="long_description"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Upload photo</label>
-                        <input type="file" class="form-control" name="photo_url" id="blog-uimage">
-                    </div>
-                    <div class="form-group">
-                        <label>Blog Type</label>
-                        <select class="form-control" aria-label="Default select example" name="blog_type">
-                            <option value="regular" selected>Regular</option>
-                            <option value="featured">Featured</option>
-                            <option value="top">Top</option>
-                            <option value="bottom">Bottom</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Blog Tech</label>
-                        <select class="form-control" name="blog_tech">
-                            <option value="all" selected>All</option>
-                            <option value="mobile">Mobile</option>
-                            <option value="desktop">Desktop</option>
-                            <option value="technology">Technology</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Active</label>
-                        <input id="blogEditActive" type="checkbox" class="custom-checkbox" checked name="active">
-                        <input name="active" type="hidden" value="false" />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <input type="button" id="e_cancel_button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                    <input type="submit" id="editblog_button" class="btn btn-success" value="Update">
-                </div>
-            </form>
+			<form id="edit_blog">
+				<div class="modal-header">
+					<h4 class="modal-title">Update Blog</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label>Title</label>
+						<input type="text" class="form-control" name="title" required>
+					</div>
+					<div class="form-group">
+						<label>Short Description</label>
+						<input type="email" class="form-control" name="short_description" required>
+					</div>
+					<div class="form-group">
+						<label>Long Description</label>
+						<textarea class="form-control" name="long_description" required></textarea>
+					</div>
+					<div class="form-group">
+						<label>Upload Photo</label>
+						<input type="text" class="form-control" name="photo_url" id="blog-uimage">
+					</div>
+					<div class="form-group">
+						<label>Blog Type</label>
+						<select class="form-control" aria-label="Default select example" name="blog_type">
+							<option value="regular" selected>Regular</option>
+							<option value="featured">Featured</option>
+							<option value="top">Top</option>
+							<option value="bottom">Bottom</option>
+						</select>
+
+				</div>
+					<div class="form-group">
+						<label>Blog Tech</label>
+						<select class="form-control" name="blog_tech">
+							<option value="all" selected>All</option>
+							<option value="mobile">Mobile</option>
+							<option value="desktop">Desktop</option>
+							<option value="technology">Technology</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Active</label>
+						<input id="blogEditActive" type="checkbox" class="custom-checkbox" checked name="active">
+						<input name="active" type="hidden" value="false" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<input type="button" id="e_cancel_button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input type="submit" id="editblog_button" class="btn btn-success" value="Update">
+				</div>
+			</form>
 		</div>
 	</div>
 </div>

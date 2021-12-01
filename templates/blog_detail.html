@@ -39,21 +39,17 @@
                     </div>
                     <div class="single-post__comment">
                         <div class="widget__title">
-                            <h4>03 Comment</h4>
+                            <h4>{{data['blog'].comment_count}} Comments</h4>
                         </div>
-                        <div class="single-post__comment__item">
-                            <div class="single-post__comment__item__text">
-                                <h5>Brandon Kelley</h5>
-                                <span>15 Aug 2017</span>
-                                <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                    adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore
-                                    magnam.</p>
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-share-square-o"></i></a></li>
-                                </ul>
+                        {% for comment in data['blog'].comments %}
+                            <div class="single-post__comment__item">
+                                <div class="single-post__comment__item__text">
+                                    <h5>{{comment.user}}</h5>
+                                    <span>{{comment.created_at}}</span>
+                                    <p>{{comment.message}}</p>
+                                </div>
                             </div>
-                        </div>
+                        {% endfor %}
                     </div>
                     {% if session["login_flag"] %}
 
@@ -61,14 +57,12 @@
                             <div class="widget__title">
                                 <h4>Leave a comment</h4>
                             </div>
-                            <form action="#">
+                            <form id="comment_form" method="post" action="{{url_for('blog_comment')}}">
                                 <div class="input-list">
-                                    <input type="text" placeholder="Name">
-                                    <input type="text" placeholder="Email">
-                                    <input type="text" placeholder="Website">
+                                    <input type="hidden" name="blog_id" value="{{data['blog'].blog_id}}">
                                 </div>
-                                <textarea placeholder="Message"></textarea>
-                                <button type="submit" class="site-btn">Submit</button>
+                                <textarea placeholder="Message" name="message"></textarea>
+                                <button type="submit" class="site-btn" id="comment_submit-button">Comment</button>
                             </form>
                         </div>
                     {% else %}

@@ -139,7 +139,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="categories__item set-bg" data-setbg="static/img/categories/cat-1.jpg">
+                    <div class="categories__item set-bg"
+                         data-setbg="static/img/about/about-3.png">
                         <div class="categories__hover__text">
                             <h5>All</h5>
                             <p>{{data['blog_count']}} articles</p>
@@ -147,7 +148,8 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="categories__item set-bg" data-setbg="static/img/categories/cat-2.jpg">
+                    <div class="categories__item set-bg"
+                         data-setbg="static/img/about/about-1.png">
                         <div class="categories__hover__text">
                             <h5>Mobile</h5>
                             <p>{{data['mobile_blog_count']}} articles</p>
@@ -155,7 +157,8 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="categories__item set-bg" data-setbg="static/img/categories/cat-3.jpg">
+                    <div class="categories__item set-bg"
+                         data-setbg="static/img/about/about-2.png">
                         <div class="categories__hover__text">
                             <h5>Desktop</h5>
                             <p>{{data['desktop_blog_count']}} articles</p>
@@ -163,7 +166,8 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="categories__item set-bg" data-setbg="static/img/categories/cat-4.jpg">
+                    <div class="categories__item set-bg"
+                         data-setbg="static/img/about/about-1.png">
                         <div class="categories__hover__text">
                             <h5>Electronics</h5>
                             <p>{{data['electronics_blog_count']}} articles</p>
@@ -194,183 +198,51 @@
                                 </ul>
                                 <p>{{data['featured_blog'][1].long_description | truncate(250)}}</p>
                                 <a href="{{ url_for('blog_detail', blog_id=data['featured_blog'][1].blog_id) }}" class="primary-btn">Read more</a>
-                                <div class="post__social">
-                                    <span>Share</span>
-                                    <a href="#"><i class="fa fa-facebook"></i> <span>82</span></a>
-                                    <a href="#"><i class="fa fa-twitter"></i> <span>24</span></a>
-                                    <a href="#"><i class="fa fa-envelope-o"></i> <span>08</span></a>
-                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6">
+                                {% for item in data['blogs'][:6] %}
                                 <div class="categories__post__item">
                                     <div class="categories__post__item__pic small__item set-bg"
-                                        data-setbg="static/img/categories/categories-post/cp-2.jpg">
+                                         data-setbg="{{url_for('static', filename='img/blog/' + item.photo_url)}}">
                                         <div class="post__meta">
-                                            <h4>08</h4>
-                                            <span>Aug</span>
+                                            <span>{{item.day}}</span>
+                                            <p>{{item.month}}</p>
                                         </div>
                                     </div>
                                     <div class="categories__post__item__text">
-                                        <span class="post__label">Recipe</span>
-                                        <h3><a href="#">The Best Weeknight Baked Potatoes, 3 Creative Ways</a></h3>
+                                        <span class="post__label">{{item.blog_tech}}</span>
+                                        <h3><a href="{{ url_for('blog_detail', blog_id=item.blog_id) }}">{{item.title}}</a></h3>
                                         <ul class="post__widget">
-                                            <li>by <span>Admin</span></li>
-                                            <li>3 min read</li>
-                                            <li>20 Comment</li>
+                                            <li>by <span>{item.created_by}}</span></li>
                                         </ul>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                            tempor incididunt dolore magna aliqua. Quis ipsum suspendisse ultrices
-                                            gravida...</p>
+                                        <p>{{item.short_description}}</p>
                                     </div>
                                 </div>
-                                <div class="categories__post__item">
-                                    <div class="categories__post__item__pic set-bg"
-                                        data-setbg="static/img/categories/categories-post/cp-4.jpg">
-                                        <div class="post__meta">
-                                            <h4>08</h4>
-                                            <span>Aug</span>
-                                        </div>
-                                    </div>
-                                    <div class="categories__post__item__text">
-                                        <ul class="post__label--large">
-                                            <li>Vegan</li>
-                                            <li>Desserts</li>
-                                        </ul>
-                                        <h3><a href="#">The Best Grass Stain Remover Is Already In Your Pantry</a></h3>
-                                        <ul class="post__widget">
-                                            <li>by <span>Admin</span></li>
-                                            <li>3 min read</li>
-                                            <li>20 Comment</li>
-                                        </ul>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                            tempor incididunt dolore magna aliqua. Quis ipsum suspendisse ultrices
-                                            gravida...</p>
-                                    </div>
-                                </div>
-                                <div class="categories__post__item__plain set-bg"
-                                    data-setbg="static/img/categories/categories-post/cp-6.jpg">
-                                    <div class="categories__post__item__text">
-                                        <div class="post__meta">
-                                            <h4>08</h4>
-                                            <span>Aug</span>
-                                        </div>
-                                        <ul class="post__label--large">
-                                            <li>Vegan</li>
-                                            <li>Desserts</li>
-                                        </ul>
-                                        <h3><a href="#">This Summer Snacking Cake Is theSweetest Excuse to...</a></h3>
-                                        <div class="post__social">
-                                            <span>Share</span>
-                                            <a href="#"><i class="fa fa-facebook"></i> <span>82</span></a>
-                                            <a href="#"><i class="fa fa-twitter"></i> <span>24</span></a>
-                                            <a href="#"><i class="fa fa-envelope-o"></i> <span>08</span></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="categories__post__item">
-                                    <div class="categories__post__item__pic smaller__large set-bg"
-                                        data-setbg="static/img/categories/categories-post/cp-8.jpg">
-                                        <div class="post__meta">
-                                            <h4>08</h4>
-                                            <span>Aug</span>
-                                        </div>
-                                    </div>
-                                    <div class="categories__post__item__text">
-                                        <span class="post__label">Smoothie</span>
-                                        <h3><a href="#">This 2-Ingredient Spread Makes Any Egg Sandwich So Much
-                                                Better</a></h3>
-                                        <ul class="post__widget">
-                                            <li>by <span>Admin</span></li>
-                                            <li>3 min read</li>
-                                            <li>20 Comment</li>
-                                        </ul>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                            tempor incididunt dolore magna aliqua. Quis ipsum suspendisse ultrices
-                                            gravida...</p>
-                                    </div>
-                                </div>
+                                {% endfor %}
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="categories__post__item">
+                                {% for item in data['blogs'][6:] %}
+                                    <div class="categories__post__item">
                                     <div class="categories__post__item__pic smaller__large set-bg"
-                                        data-setbg="static/img/categories/categories-post/cp-3.jpg">
+                                         data-setbg="{{url_for('static', filename='img/blog/' + item.photo_url)}}">
                                         <div class="post__meta">
-                                            <h4>08</h4>
-                                            <span>Aug</span>
+                                            <span>{{item.day}}</span>
+                                            <p>{{item.month}}</p>
                                         </div>
                                     </div>
                                     <div class="categories__post__item__text">
-                                        <span class="post__label">Dinner</span>
-                                        <h3><a href="#">17 Perfect Gifts for Your Vegan Friend Because Sometimes...</a>
+                                        <span class="post__label">{{item.blog_tech}}</span>
+                                        <h3><a href="{{ url_for('blog_detail', blog_id=item.blog_id) }}">{{item.title}}</a></h3>
                                         </h3>
                                         <ul class="post__widget">
-                                            <li>by <span>Admin</span></li>
-                                            <li>3 min read</li>
-                                            <li>20 Comment</li>
+                                            <li>by <span>{item.created_by}}</span></li>
                                         </ul>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                            tempor incididunt dolore magna aliqua. Quis ipsum suspendisse ultrices
-                                            gravida...</p>
+                                        <p>{{item.short_description | truncate(150)}}</p>
                                     </div>
                                 </div>
-                                <div class="categories__post__item__small">
-                                    <img src="static/img/categories/categories-post/quote.png" alt="">
-                                    <p>Lorem ipsum dolor amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                        incididunt labore et dolore magna aliqua gravida.</p>
-                                    <div class="posted__by">Elena T.Jaivy</div>
-                                </div>
-                                <div class="categories__post__item">
-                                    <div class="categories__post__item__pic smaller__large set-bg"
-                                        data-setbg="static/img/categories/categories-post/cp-5.jpg">
-                                        <div class="post__meta">
-                                            <h4>08</h4>
-                                            <span>Aug</span>
-                                        </div>
-                                    </div>
-                                    <div class="categories__post__item__text">
-                                        <span class="post__label">Drinks</span>
-                                        <h3><a href="#">A 5-Minute Peach Mug Cobbler That Just So Happens to...</a></h3>
-                                        <ul class="post__widget">
-                                            <li>by <span>Admin</span></li>
-                                            <li>3 min read</li>
-                                            <li>20 Comment</li>
-                                        </ul>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                            tempor incididunt dolore magna aliqua. Quis ipsum suspendisse ultrices
-                                            gravida...</p>
-                                    </div>
-                                </div>
-                                <div class="categories__post__item">
-                                    <div class="categories__post__item__pic set-bg"
-                                        data-setbg="static/img/categories/categories-post/cp-7.jpg">
-                                        <div class="post__meta">
-                                            <h4>08</h4>
-                                            <span>Aug</span>
-                                        </div>
-                                    </div>
-                                    <div class="categories__post__item__text">
-                                        <ul class="post__label--large">
-                                            <li>Vegan</li>
-                                            <li>Desserts</li>
-                                        </ul>
-                                        <h3><a href="#">Fresh Herb Polenta with Parsnip Chips and Maple Butter</a></h3>
-                                        <ul class="post__widget">
-                                            <li>by <span>Admin</span></li>
-                                            <li>3 min read</li>
-                                            <li>20 Comment</li>
-                                        </ul>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                            tempor incididunt dolore magna aliqua. Quis ipsum suspendisse ultrices
-                                            gravida...</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12 text-center">
-                                <div class="load__more__btn">
-                                    <a href="#">Load more</a>
-                                </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -378,82 +250,42 @@
                         <div class="sidebar__item">
                             <div class="sidebar__about__item">
                                 <div class="sidebar__item__title">
-                                    <h6>About me</h6>
+                                    <h6>About Us</h6>
                                 </div>
-                                <img src="static/img/sidebar/sidebar-about.jpg" alt="">
-                                <h6>Hi every one! I,m <span>Lena Mollein.</span></h6>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua.</p>
-                                <a href="#" class="primary-btn">Read more</a>
-                            </div>
-                            <div class="sidebar__follow__item">
-                                <div class="sidebar__item__title">
-                                    <h6>Follow me</h6>
-                                </div>
-                                <div class="sidebar__item__follow__links">
-                                    <a href="#"><i class="fa fa-facebook"></i></a>
-                                    <a href="#"><i class="fa fa-twitter"></i></a>
-                                    <a href="#"><i class="fa fa-youtube-play"></i></a>
-                                    <a href="#"><i class="fa fa-instagram"></i></a>
-                                    <a href="#"><i class="fa fa-envelope-o"></i></a>
-                                </div>
+                                <img src="static/img/about/about-3.png" alt="">
+                                <h6>Hi every one! We are <span>Tech Lovers.</span></h6>
+                                <p>We will dive into the world of Technologies. We will tell you the new and interesting things happening around
+                                the world.</p>
+                                <a href="{{url_for('about')}}" class="primary-btn">Read more</a>
                             </div>
                             <div class="sidebar__feature__item">
                                 <div class="sidebar__item__title">
                                     <h6>Feature Posts</h6>
                                 </div>
                                 <div class="sidebar__feature__item__large set-bg"
-                                    data-setbg="static/img/sidebar/feature-post.jpg">
+                                     data-setbg="{{url_for('static', filename='img/blog/' + data['featured_blog'][1].photo_url)}}">
                                     <div class="sidebar__feature__item__large--text">
-                                        <span>Dinner</span>
-                                        <h5><a href="#">This Japanese Way of Making Iced Coffee Is a Game...</a></h5>
+                                        <span>{{data['featured_blog'][1].blog_tech}}</span>
+                                        <h5><a href="{{ url_for('blog_detail', blog_id=data['featured_blog'][1].blog_id) }}">{{data['featured_blog'][1].title}}</a></h5>
                                     </div>
                                 </div>
                                 <div class="sidebar__feature__item__list">
+                                    {% for item in data['featured_blog'][2:] %}
                                     <div class="sidebar__feature__item__list__single">
                                         <div class="post__meta">
-                                            <h4>08</h4>
-                                            <span>Aug</span>
+                                            <h4>{{item.day}}</h4>
+                                            <span>{{item.month}}</span>
                                         </div>
                                         <div class="post__text">
-                                            <span>Dinner</span>
-                                            <h5><a href="#">Grilled Potato and Green Bean Salad</a></h5>
+                                            <span>{{item.blog_tech}}</span>
+                                            <h5><a href="{{ url_for('blog_detail', blog_id=item.blog_id) }}">{{item.title}}</a></h5>
                                         </div>
                                     </div>
-                                    <div class="sidebar__feature__item__list__single">
-                                        <div class="post__meta">
-                                            <h4>05</h4>
-                                            <span>Aug</span>
-                                        </div>
-                                        <div class="post__text">
-                                            <span>Smoothie</span>
-                                            <h5><a href="#">The $8 French Rosé I Buy in Bulk Every Summer</a></h5>
-                                        </div>
-                                    </div>
-                                    <div class="sidebar__feature__item__list__single">
-                                        <div class="post__meta">
-                                            <h4>26</h4>
-                                            <span>jul</span>
-                                        </div>
-                                        <div class="post__text">
-                                            <span>Desert</span>
-                                            <h5><a href="#">Ina Garten's Skillet-Roasted Lemon Chicken</a></h5>
-                                        </div>
-                                    </div>
-                                    <div class="sidebar__feature__item__list__single">
-                                        <div class="post__meta">
-                                            <h4>16</h4>
-                                            <span>jul</span>
-                                        </div>
-                                        <div class="post__text">
-                                            <span>Vegan</span>
-                                            <h5><a href="#">The Best Weeknight Baked Potatoes, 3 Creative Ways</a></h5>
-                                        </div>
-                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="sidebar__item__banner">
-                                <img src="static/img/sidebar/banner.jpg" alt="">
+                                <img src="static/img/about/about-2.png" alt="">
                             </div>
                             <div class="sidebar__item__categories">
                                 <div class="sidebar__item__title">
@@ -465,21 +297,6 @@
                                     <li><a href="#">Desktop <span>{{data['desktop_blog_count']}}</span></a></li>
                                     <li><a href="#">Electronics <span>{{data['electronics_blog_count']}}</span></a></li>
                                 </ul>
-                            </div>
-                            <div class="sidebar__subscribe__item">
-                                <div class="sidebar__item__title">
-                                    <h6>Subscribe</h6>
-                                </div>
-                                <p>Subscribe to our newsletter and get our newest updates right on your inbox.</p>
-                                <form action="#">
-                                    <input type="text" class="email-input" placeholder="Your email">
-                                    <label for="s-agree-check">
-                                        I agree to the terms & conditions
-                                        <input type="checkbox" id="s-agree-check">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                    <button type="submit" class="site-btn">Subscribe</button>
-                                </form>
                             </div>
                         </div>
                     </div>

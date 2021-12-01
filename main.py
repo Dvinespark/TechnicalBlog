@@ -68,8 +68,32 @@ app.add_url_rule('/admin/desktop_blogs/delete', 'delete-desktop_blogs', view_fun
 # 4 update
 app.add_url_rule('/admin/desktop_blogs/edit', 'edit-desktop_blogs', view_func=views.desktop_blogs_update, methods=["POST"])
 
+# /mobile_blogs
+app.add_url_rule('/admin/mobile_blogs', 'mobile_blogs', view_func=views.mobile_blogs_list, methods=["GET"])
+
+# 2 create
+app.add_url_rule('/admin/mobile_blogs/create', 'create-mobile_blogs', view_func=views.mobile_blogs_create, methods=["POST"])
+
+# 3 delete
+app.add_url_rule('/admin/mobile_blogs/delete', 'delete-mobile_blogs', view_func=views.mobile_blogs_delete, methods=["POST"])
+
+# 4 update
+app.add_url_rule('/admin/mobile_blogs/edit', 'edit-mobile_blogs', view_func=views.mobile_blogs_update, methods=["POST"])
 
 
+
+# 5 blog detail
+app.add_url_rule('/blog/detail/<int:blog_id>', 'blog_detail', view_func=views.blog_detail, methods=["GET"])
+
+# comment in blog
+app.add_url_rule('/blog/comment', 'blog_comment', view_func=views.blog_comment, methods=["POST"])
+
+# 5 admin comment list
+app.add_url_rule('/admin/comments', 'admin-comments', view_func=views.admin_comments, methods=["GET"])
+
+# admin email update
+
+app.add_url_rule('/admin/comment/edit', 'comment-update', view_func=views.admin_comment_update, methods=["POST"])
 
 if __name__ == "__main__":
     app.run(debug=True )
