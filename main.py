@@ -76,6 +76,12 @@ app.add_url_rule('/blog/detail/<int:blog_id>', 'blog_detail', view_func=views.bl
 # comment in blog
 app.add_url_rule('/blog/comment', 'blog_comment', view_func=views.blog_comment, methods=["POST"])
 
+# 5 admin comment list
+app.add_url_rule('/admin/comments', 'admin-comments', view_func=views.admin_comments, methods=["GET"])
+
+# admin email update
+
+app.add_url_rule('/admin/comment/edit', 'comment-update', view_func=views.admin_comment_update, methods=["POST"])
 
 if __name__ == "__main__":
     app.run(debug=True)

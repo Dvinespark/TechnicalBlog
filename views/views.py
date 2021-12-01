@@ -705,7 +705,7 @@ def blog_detail(blog_id):
     item_date = datetime.datetime.fromisoformat(blog['created_at'])
     blog['day'] = item_date.day
     blog['month'] = item_date.strftime("%b")
-    blog['comments'] = comment_coll.find({'blog_id': int(blog_id)})
+    blog['comments'] = comment_coll.find({'blog_id': int(blog_id), 'active': True})
     blog['comment_count'] = blog['comments'].count() if blog['comments'].count() else 0
     print(blog)
     context = {
@@ -745,3 +745,50 @@ def blog_comment():
         comment_coll.insert_one(data)
         return redirect(url_for('blog_detail', blog_id=blog_id))
     return redirect(url_for("login"))
+
+
+def admin_comments():
+    db = MongoDB()
+    contact_coll = db.get_collection("comments")
+    comments = contact_coll.find({"active": True})
+    context = {
+        "comments": comments
+    }
+    return render_template("admin/comments.html", data=context)
+
+
+def admin_comment_update():
+    current_user = session.get('username', None)
+    login_flag = session.get('login_flag', False)
+
+    db = MongoDB()
+    comments_coll = db.get_collection("comments")
+
+    id = request.form['id']
+    active = request.form.get('active', 'false')
+    if active == 'false':
+        active = True
+    else:
+        active = False
+    update_record = {
+        "updated_at": str(datetime.date.today())
+    }
+    if active is not None:
+        update_record["active"] = active
+
+    # check if user is logged in
+    if current_user and login_flag:
+        output = comments_coll.update({"id": int(id)}, {"$set": update_record})
+        print(output)
+        return {
+            "status_code": STATUS["success"],
+            "message": "Record updated successfully.",
+            "url": url_for("admin-comments")
+        }
+
+    else:
+        return {
+            "status_code": STATUS["error"],
+            "message": "Sorry something went wrong. Please try again later.",
+            "url": url_for("admin-comments")
+        }
