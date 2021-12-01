@@ -73,5 +73,9 @@ app.add_url_rule('/admin/mobile_blogs/edit', 'edit-mobile_blogs', view_func=view
 # 5 blog detail
 app.add_url_rule('/blog/detail/<int:blog_id>', 'blog_detail', view_func=views.blog_detail, methods=["GET"])
 
+# comment in blog
+app.add_url_rule('/blog/comment', 'blog_comment', view_func=views.blog_comment, methods=["POST"])
+
+
 if __name__ == "__main__":
     app.run(debug=True)

@@ -696,14 +696,18 @@ def mobile_blogs_delete():
         "url": url_for("mobile_blogs")
     }
 
-def blog_detail(blog_id):
 
+def blog_detail(blog_id):
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
+    comment_coll = db.get_collection("comments")
     blog = blog_coll.find_one({'blog_id': int(blog_id)})
     item_date = datetime.datetime.fromisoformat(blog['created_at'])
     blog['day'] = item_date.day
     blog['month'] = item_date.strftime("%b")
+    blog['comments'] = comment_coll.find({'blog_id': int(blog_id)})
+    blog['comment_count'] = blog['comments'].count() if blog['comments'].count() else 0
+    print(blog)
     context = {
         "login_flag": False,
         "user_admin": False,
@@ -711,3 +715,33 @@ def blog_detail(blog_id):
         "blog": blog
     }
     return render_template("blog_detail.html", data=context)
+
+
+def blog_comment():
+    if request.method =="POST":
+        db = MongoDB()
+        comment_coll = db.get_collection("comments")
+        blog_id = request.form['blog_id']
+        active = True
+        comment_message = request.form.get('message', None)
+        current_user = session.get('username', None)
+
+        last_inserted_id = 0
+        try:
+            last_inserted_id = comment_coll.find({}, {"id"}).sort("_id", -1).limit(1)[0]["id"]
+        except Exception as e:
+            pass
+        # do the logic to increment post_id
+        comment_id = last_inserted_id + 1
+        data = {
+            'id': comment_id,
+            'blog_id': int(blog_id),
+            'message': comment_message,
+            'active': active,
+            'user': current_user,
+            "created_at": str(datetime.date.today().strftime('%d %b %Y')),
+            "updated_at": None
+        }
+        comment_coll.insert_one(data)
+        return redirect(url_for('blog_detail', blog_id=blog_id))
+    return redirect(url_for("login"))
