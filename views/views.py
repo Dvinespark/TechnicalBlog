@@ -532,24 +532,9 @@ def contact():
 def about():
     return render_template("about.html", data={})
 
-# 2 blog
+
+# 2 mobile blog
 def mobile_blogs_list():
-    # blog_data = {
-    #     "blog_id": password1,
-    #     "small_description": email,
-    #     "active": True,
-    #     "long_description": active,
-    #     "photo_url": fullname,
-    #     "blog_type": "feature",  # default type will be normal
-    #     "blog_technology": "mobile", # desktop, science, all
-    #     "inserted_date": today date,
-    #     "updated_date": None,
-    #     "created_by": username,
-    #     "updated_by": username
-    # }
-
-    # do the admin check if admin then do the following
-
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
     blogs = blog_coll.find({"blog_tech": "mobile"})
@@ -557,6 +542,7 @@ def mobile_blogs_list():
         "blogs": blogs
     }
     return render_template("admin/mobile_blogs.html", data=context)
+
 
 def mobile_blogs_create():
     print("method called")
