@@ -12,9 +12,9 @@
                         <nav class="header__menu">
                             <ul>
                                 <li class="active"><a href="{{ url_for('index') }}">Home</a></li>
-                                <li><a href="#">Mobile</a></li>
-                                <li><a href="#">Desktop</a></li>
-                                <li><a href="#">Electronics</a></li>
+                                <li><a href="{{ url_for('index', blog_tech='mobile') }}">Mobile</a></li>
+                                <li><a href="{{ url_for('index', blog_tech='desktop') }}">Desktop</a></li>
+                                <li><a href="{{ url_for('index', blog_tech='electronics') }}">Electronics</a></li>
                                 <li><a href="{{ url_for('about') }}">About</a></li>
                                 <li><a href="{{ url_for('contact') }}">Contact</a></li>
                                 {% if session["username"] and session["login_flag"] %}

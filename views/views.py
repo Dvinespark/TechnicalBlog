@@ -27,9 +27,14 @@ def index():
     #     print(document)
 
     # start passing data to UI
+    print(request)
     db = MongoDB()
     collection = db.get_collection("blogs")
-    featured_blog = collection.find({"blog_type": "featured"}).sort("_id", -1).limit(6)
+    blog_tech = request.args.get("blog_tech", None)
+    if blog_tech is not None:
+        featured_blog = collection.find({"blog_type": "featured", "blog_tech": blog_tech}).sort("_id", -1).limit(6)
+    else:
+        featured_blog = collection.find({"blog_type": "featured"}).sort("_id", -1).limit(6)
     featured_blog_list = []
     for item in featured_blog:
         item_date = datetime.datetime.fromisoformat(item['created_at'])
@@ -38,7 +43,10 @@ def index():
         featured_blog_list.append(item)
 
     top_blog_list = []
-    top_blog = collection.find({"blog_type": "top"}).sort("_id", -1).limit(4)
+    if blog_tech is not None:
+        top_blog = collection.find({"blog_type": "top", "blog_tech": blog_tech}).sort("_id", -1).limit(4)
+    else:
+        top_blog = collection.find({"blog_type": "top"}).sort("_id", -1).limit(4)
     for item in top_blog:
         item_date = datetime.datetime.fromisoformat(item['created_at'])
         item['day'] = item_date.day
@@ -46,7 +54,10 @@ def index():
         top_blog_list.append(item)
 
     regular_blog_list = []
-    regular_blog = collection.find({"blog_type": "regular"}).sort("_id", -1).limit(2)
+    if blog_tech is not None:
+        regular_blog = collection.find({"blog_type": "regular", "blog_tech": blog_tech}).sort("_id", -1).limit(2)
+    else:
+        regular_blog = collection.find({"blog_type": "regular"}).sort("_id", -1).limit(2)
     for item in regular_blog:
         item_date = datetime.datetime.fromisoformat(item['created_at'])
         item['day'] = item_date.day
