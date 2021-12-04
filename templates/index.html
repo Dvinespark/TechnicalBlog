@@ -215,7 +215,7 @@
                                         <span class="post__label">{{item.blog_tech}}</span>
                                         <h3><a href="{{ url_for('blog_detail', blog_id=item.blog_id) }}">{{item.title}}</a></h3>
                                         <ul class="post__widget">
-                                            <li>by <span>{item.created_by}}</span></li>
+                                            <li>by <span>{{item.created_by}}</span></li>
                                         </ul>
                                         <p>{{item.short_description}}</p>
                                     </div>
@@ -237,7 +237,7 @@
                                         <h3><a href="{{ url_for('blog_detail', blog_id=item.blog_id) }}">{{item.title}}</a></h3>
                                         </h3>
                                         <ul class="post__widget">
-                                            <li>by <span>{item.created_by}}</span></li>
+                                            <li>by <span>{{item.created_by}}</span></li>
                                         </ul>
                                         <p>{{item.short_description | truncate(150)}}</p>
                                     </div>
