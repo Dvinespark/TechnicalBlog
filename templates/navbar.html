@@ -30,6 +30,9 @@
                             {% if session["username"] and session["login_flag"] %}
                                 Hey {{session["username"]}}!
                             {% endif %}
+                            {% if session["admin_flag"] %}
+                            <a href="{{url_for('admin')}}">Dashboard</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

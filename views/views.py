@@ -144,6 +144,7 @@ def logout():
     session["login_flag"] = False
     session["signup_flag"] = False
     session["signup_message"] = None
+    session["user_admin"] = False
 
     return render_template("signin.html", data=context)
 
