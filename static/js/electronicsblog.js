@@ -93,9 +93,9 @@ $(document).ready(function(){
         $("#edit_blog input[name=short_description]").val($(tds[1]).text());
         $("#edit_blog textarea[name=long_description]").val($(tds[2]).text());
         $("#edit_blog select[name=blog_type]").val($(tds[4]).text());
-        $("#blogEditActive").prop("checked", $(tds[6]).text() === "true");
+        $("#blogEditActive").prop("checked", $(tds[5]).text() === "true");
 
-        $("#blogEditActive").val($(tds[6]).text() === "true");
+        $("#blogEditActive").val($(tds[5]).text() === "true");
 
         // edit blogblogEditActive
         $('#editblog_button').on('click', function (e){
