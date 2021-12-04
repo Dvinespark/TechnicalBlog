@@ -65,6 +65,7 @@ def index():
     blog_list = []
     blogs = collection.find({})
     blog_count = blogs.count()
+    blogs = blogs.sort("_id", -1).limit(10)
     for item in blogs:
         item_date = datetime.datetime.fromisoformat(item['created_at'])
         item['day'] = item_date.day
