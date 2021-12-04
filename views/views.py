@@ -342,7 +342,7 @@ def blog_create():
         "blog_id": blog_id,
         "photo_url": request.form.get("photo_url", None),
         "blog_type": request.form.get("blog_type", None),
-        "blog_tech": 'mobile',
+        "blog_tech": request.form.get("blog_tech", None),
         "created_at": str(datetime.date.today()),
         "updated_at": None
     }
