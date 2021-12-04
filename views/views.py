@@ -858,7 +858,6 @@ def desktop_blogs_delete():
         "db_message": str(blog),
         "url": url_for("desktop_blogs")
     }
-    return render_template("blog_detail.html", data=context) # change here
 
 
 def blog_comment():
