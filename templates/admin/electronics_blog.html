@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Mobile Blogs | TechBlog</title>
+    <title>Electronics Blog | TechBlog</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css')}}" type="text/css">
@@ -16,10 +16,10 @@
         <div class="table-title">
             <div class="row">
                 <div class="col-sm-6">
-                    <h2> <b>Manage Mobile Blogs</b></h2>
+                    <h2> <b>Manage Electronics Blog</b></h2>
                 </div>
                 <div class="col-sm-6">
-                              <a href="#addBlogModal" class="btn btn-success" data-toggle="modal"><i class="fas fa-plus"></i> <span>Add New Mobile Blog</span></a>
+                              <a href="#addBlogModal" class="btn btn-success" data-toggle="modal"><i class="fas fa-plus"></i> <span>Add New Electronics Blog</span></a>
                 </div>
             </div>
         </div>
@@ -31,7 +31,6 @@
                 <th style="display: none;">Long Description</th>
                 <th>Photo</th>
                 <th>Blog Type</th>
-                <th>Blog Tech</th>
                 <th>Active</th>
                 <th>Created By</th>
                 <th>Created At</th>
@@ -47,7 +46,6 @@
                     <img class="img-fluid img-thumbnail" style="width: 50px; height: 50px;" src="{{url_for('static', filename = 'img/blog/' + blog['photo_url'])}}" alt="">
                 </td>
                 <td>{{blog['blog_type']}}</td>
-                <td>{{blog['blog_tech']}}</td>
                 <td>{{blog['active']}}</td>
                 <td>{{blog['created_by']}}</td>
                 <td>{{blog['created_at']}}</td>
@@ -68,7 +66,7 @@
 		<div class="modal-content">
 			<form id="add_blog" action="" method="post" enctype="multipart/form-data">
 				<div class="modal-header">
-					<h4 class="modal-title">Add Mobile Blog</h4>
+					<h4 class="modal-title">Add Electronics Blog</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">
@@ -118,7 +116,7 @@
 		<div class="modal-content">
             <form id="edit_blog">
                 <div class="modal-header">
-                    <h4 class="modal-title">Update Blog</h4>
+                    <h4 class="modal-title">Update Electronics Blog</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
@@ -167,7 +165,7 @@
         <div class="modal-content">
             <form action="">
                 <div class="modal-header">
-                    <h4 class="modal-title">Delete Blog</h4>
+                    <h4 class="modal-title">Delete Electronics Blog</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
@@ -185,6 +183,6 @@
 <!-- Js Plugins -->
 <script src="{{ url_for('static',filename='js/jquery-3.3.1.min.js')}}"></script>
 <script src="{{ url_for('static',filename='js/bootstrap.min.js')}}"></script>
-<script src="{{ url_for('static',filename='js/mobileblogs.js') }}"></script>
+<script src="{{ url_for('static',filename='js/electronicsblog.js') }}"></script>
 </body>
 </html>

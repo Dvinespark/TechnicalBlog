@@ -690,6 +690,105 @@ def mobile_blogs_delete():
     }
 
 
+
+
+def blog_detail(blog_id):
+    db = MongoDB()
+    blog_coll = db.get_collection("blogs")
+    comment_coll = db.get_collection("comments")
+    blog = blog_coll.find_one({'blog_id': int(blog_id)})
+    item_date = datetime.datetime.fromisoformat(blog['created_at'])
+    blog['day'] = item_date.day
+    blog['month'] = item_date.strftime("%b")
+    blog['comments'] = comment_coll.find({'blog_id': int(blog_id), 'active': True})
+    blog['comment_count'] = blog['comments'].count() if blog['comments'].count() else 0
+    print(blog)
+    context = {
+        "login_flag": False,
+        "user_admin": False,
+        "username": None,
+        "blog": blog
+    }
+    return render_template("blog_detail.html", data=context)
+
+
+def blog_comment():
+    if request.method =="POST":
+        db = MongoDB()
+        comment_coll = db.get_collection("comments")
+        blog_id = request.form['blog_id']
+        active = True
+        comment_message = request.form.get('message', None)
+        current_user = session.get('username', None)
+
+        last_inserted_id = 0
+        try:
+            last_inserted_id = comment_coll.find({}, {"id"}).sort("_id", -1).limit(1)[0]["id"]
+        except Exception as e:
+            pass
+        # do the logic to increment post_id
+        comment_id = last_inserted_id + 1
+        data = {
+            'id': comment_id,
+            'blog_id': int(blog_id),
+            'message': comment_message,
+            'active': active,
+            'user': current_user,
+            "created_at": str(datetime.date.today().strftime('%d %b %Y')),
+            "updated_at": None
+        }
+        comment_coll.insert_one(data)
+        return redirect(url_for('blog_detail', blog_id=blog_id))
+    return redirect(url_for("login"))
+
+
+def admin_comments():
+    db = MongoDB()
+    contact_coll = db.get_collection("comments")
+    comments = contact_coll.find({"active": True})
+    context = {
+        "comments": comments
+    }
+    return render_template("admin/comments.html", data=context)
+
+
+def admin_comment_update():
+    current_user = session.get('username', None)
+    login_flag = session.get('login_flag', False)
+
+    db = MongoDB()
+    comments_coll = db.get_collection("comments")
+
+    id = request.form['id']
+    active = request.form.get('active', 'false')
+    if active == 'false':
+        active = True
+    else:
+        active = False
+    update_record = {
+        "updated_at": str(datetime.date.today())
+    }
+    if active is not None:
+        update_record["active"] = active
+
+    # check if user is logged in
+    if current_user and login_flag:
+        output = comments_coll.update({"id": int(id)}, {"$set": update_record})
+        print(output)
+        return {
+            "status_code": STATUS["success"],
+            "message": "Record updated successfully.",
+            "url": url_for("admin-comments")
+        }
+
+    else:
+        return {
+            "status_code": STATUS["error"],
+            "message": "Sorry something went wrong. Please try again later.",
+            "url": url_for("admin-comments")
+        }
+
+
 # 2 electronics blog
 def electronics_blog_list():
     db = MongoDB()
@@ -839,99 +938,3 @@ def electronics_blog_delete():
         "url": url_for("electronics_blog")
     }
 
-
-def blog_detail(blog_id):
-    db = MongoDB()
-    blog_coll = db.get_collection("blogs")
-    comment_coll = db.get_collection("comments")
-    blog = blog_coll.find_one({'blog_id': int(blog_id)})
-    item_date = datetime.datetime.fromisoformat(blog['created_at'])
-    blog['day'] = item_date.day
-    blog['month'] = item_date.strftime("%b")
-    blog['comments'] = comment_coll.find({'blog_id': int(blog_id), 'active': True})
-    blog['comment_count'] = blog['comments'].count() if blog['comments'].count() else 0
-    print(blog)
-    context = {
-        "login_flag": False,
-        "user_admin": False,
-        "username": None,
-        "blog": blog
-    }
-    return render_template("blog_detail.html", data=context)
-
-
-def blog_comment():
-    if request.method =="POST":
-        db = MongoDB()
-        comment_coll = db.get_collection("comments")
-        blog_id = request.form['blog_id']
-        active = True
-        comment_message = request.form.get('message', None)
-        current_user = session.get('username', None)
-
-        last_inserted_id = 0
-        try:
-            last_inserted_id = comment_coll.find({}, {"id"}).sort("_id", -1).limit(1)[0]["id"]
-        except Exception as e:
-            pass
-        # do the logic to increment post_id
-        comment_id = last_inserted_id + 1
-        data = {
-            'id': comment_id,
-            'blog_id': int(blog_id),
-            'message': comment_message,
-            'active': active,
-            'user': current_user,
-            "created_at": str(datetime.date.today().strftime('%d %b %Y')),
-            "updated_at": None
-        }
-        comment_coll.insert_one(data)
-        return redirect(url_for('blog_detail', blog_id=blog_id))
-    return redirect(url_for("login"))
-
-
-def admin_comments():
-    db = MongoDB()
-    contact_coll = db.get_collection("comments")
-    comments = contact_coll.find({"active": True})
-    context = {
-        "comments": comments
-    }
-    return render_template("admin/comments.html", data=context)
-
-
-def admin_comment_update():
-    current_user = session.get('username', None)
-    login_flag = session.get('login_flag', False)
-
-    db = MongoDB()
-    comments_coll = db.get_collection("comments")
-
-    id = request.form['id']
-    active = request.form.get('active', 'false')
-    if active == 'false':
-        active = True
-    else:
-        active = False
-    update_record = {
-        "updated_at": str(datetime.date.today())
-    }
-    if active is not None:
-        update_record["active"] = active
-
-    # check if user is logged in
-    if current_user and login_flag:
-        output = comments_coll.update({"id": int(id)}, {"$set": update_record})
-        print(output)
-        return {
-            "status_code": STATUS["success"],
-            "message": "Record updated successfully.",
-            "url": url_for("admin-comments")
-        }
-
-    else:
-        return {
-            "status_code": STATUS["error"],
-            "message": "Sorry something went wrong. Please try again later.",
-            "url": url_for("admin-comments")
-        }
