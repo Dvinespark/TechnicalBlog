@@ -27,7 +27,6 @@ def index():
     #     print(document)
 
     # start passing data to UI
-    print(request)
     db = MongoDB()
     collection = db.get_collection("blogs")
     blog_tech = request.args.get("blog_tech", None)
