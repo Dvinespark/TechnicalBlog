@@ -114,13 +114,11 @@ def login():
     username = session.get("username", None)
 
     if request.method == "GET":
-        print("Get method called.")
         if login_flag and username is not None:
             return redirect(url_for('index'))
         return render_template("signin.html", data=context)
 
     if request.method == "POST":
-        print("Post method called")
 
         session["signup_flag"] = False
         session["signup_message"] = None
@@ -165,7 +163,6 @@ def register():
     Create new user
     :return:
     """
-    print("register post method called")
     context = {
         "login_flag": False,
         "user_admin": False,
@@ -184,7 +181,6 @@ def register():
         user_coll = db.get_collection("user")
         users = user_coll.find({})
         print(users)
-        print("working upto here")
         for user in users:
             if user["username"] == username:
                 session["signup_message"] = "User already exists! Please create a new one with different user."
@@ -210,7 +206,6 @@ def register():
             "url": url_for("login")
         }
     except Exception as e:
-        print(e)
         session["signup_flag"] = False
         session["signup_message"] = "Something went wrong. Please try again later."
         return {
@@ -269,7 +264,7 @@ def delete_user():
     username = request.form['username']
     db = MongoDB()
     user_coll = db.get_collection('user')
-    user = user_coll.find_one_and_delete({"username": username})
+    user_coll.find_one_and_delete({"username": username})
     return {
         "status_code": 200,
         "message": "user deleted successfully.",
@@ -326,9 +321,6 @@ def blog_list():
 
 
 def blog_create():
-    print("method called")
-    print(request.form)
-    print(request.files)
     # db.SOME_COLLECTION.find().sort({"_id": -1}).limit(1)
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
@@ -364,11 +356,9 @@ def blog_create():
                     "." + file_name.split('.')[1]
         file.filename = file_name
         file_path = os.path.join(flask.current_app.root_path, 'static', 'img', 'blog', file_name)
-        print(file_path)
         file.save(file_path)
 
         data['photo_url'] = file_name
-    print(data)
     # check if user is logged in
     if current_user and login_flag:
         blog_coll.insert_one(data)
@@ -435,11 +425,9 @@ def blog_update():
         file.save(file_path)
 
         update_record['photo_url'] = file_name
-    print(update_record)
     # check if user is logged in
     if current_user and login_flag:
         output = blog_coll.update({"blog_id": int(blog_id)}, {"$set": update_record})
-        print(output)
         return {
             "status_code": STATUS["success"],
             "message": "Blog updated successfully.",
@@ -503,7 +491,6 @@ def admin_emails_update():
     # check if user is logged in
     if current_user and login_flag:
         output = contacts_coll.update({"id": int(id)}, {"$set": update_record})
-        print(output)
         return {
             "status_code": STATUS["success"],
             "message": "Record updated successfully.",
@@ -573,9 +560,6 @@ def mobile_blogs_list():
 
 
 def mobile_blogs_create():
-    print("method called")
-    print(request.form)
-    print(request.files)
     # db.SOME_COLLECTION.find().sort({"_id": -1}).limit(1)
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
@@ -611,11 +595,9 @@ def mobile_blogs_create():
                     "." + file_name.split('.')[1]
         file.filename = file_name
         file_path = os.path.join(flask.current_app.root_path, 'static', 'img', 'blog', file_name)
-        print(file_path)
         file.save(file_path)
 
         data['photo_url'] = file_name
-    print(data)
     # check if user is logged in
     if current_user and login_flag:
         blog_coll.insert_one(data)
@@ -678,11 +660,9 @@ def mobile_blogs_update():
         file.save(file_path)
 
         update_record['photo_url'] = file_name
-    print(update_record)
     # check if user is logged in
     if current_user and login_flag:
         output = blog_coll.update({"blog_id": int(blog_id)}, {"$set": update_record})
-        print(output)
         return {
             "status_code": STATUS["success"],
             "message": "Blog updated successfully.",
@@ -723,7 +703,6 @@ def blog_detail(blog_id):
     blog['month'] = item_date.strftime("%b")
     blog['comments'] = comment_coll.find({'blog_id': int(blog_id), 'active': True})
     blog['comment_count'] = blog['comments'].count() if blog['comments'].count() else 0
-    print(blog)
     context = {
         "login_flag": False,
         "user_admin": False,
@@ -734,9 +713,6 @@ def blog_detail(blog_id):
 
 
 def desktop_blogs_create():
-    print("method called")
-    print(request.form)
-    print(request.files)
     # db.SOME_COLLECTION.find().sort({"_id": -1}).limit(1)
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
@@ -776,7 +752,6 @@ def desktop_blogs_create():
         file.save(file_path)
 
         data['photo_url'] = file_name
-    print(data)
     # check if user is logged in
     if current_user and login_flag:
         blog_coll.insert_one(data)
@@ -807,7 +782,6 @@ def desktop_blogs_update():
     long_description = request.form.get('long_description', None)
     blog_type = request.form.get('blog_type', "regular")
     title = request.form.get('title', None)
-    print(blog_id)
     update_record = {
         "updated_by": current_user,
         "updated_at": str(datetime.date.today())
@@ -835,15 +809,12 @@ def desktop_blogs_update():
                     "." + file_name.split('.')[1]
         file.filename = file_name
         file_path = os.path.join(flask.current_app.root_path, 'static', 'img', 'blog', file_name)
-        print(file_path)
         file.save(file_path)
 
         update_record['photo_url'] = file_name
-    print(update_record)
     # check if user is logged in
     if current_user and login_flag:
         output = blog_coll.update({"blog_id": int(blog_id)}, {"$set": update_record})
-        print(output)
         return {
             "status_code": STATUS["success"],
             "message": "Desktop Blog updated successfully.",
@@ -934,7 +905,6 @@ def admin_comment_update():
     # check if user is logged in
     if current_user and login_flag:
         output = comments_coll.update({"id": int(id)}, {"$set": update_record})
-        print(output)
         return {
             "status_code": STATUS["success"],
             "message": "Record updated successfully.",
@@ -961,9 +931,6 @@ def electronics_blog_list():
 
 
 def electronics_blog_create():
-    print("method called")
-    print(request.form)
-    print(request.files)
     # db.SOME_COLLECTION.find().sort({"_id": -1}).limit(1)
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
@@ -999,11 +966,9 @@ def electronics_blog_create():
                     "." + file_name.split('.')[1]
         file.filename = file_name
         file_path = os.path.join(flask.current_app.root_path, 'static', 'img', 'blog', file_name)
-        print(file_path)
         file.save(file_path)
 
         data['photo_url'] = file_name
-    print(data)
     # check if user is logged in
     if current_user and login_flag:
         blog_coll.insert_one(data)
@@ -1062,15 +1027,12 @@ def electronics_blog_update():
                     "." + file_name.split('.')[1]
         file.filename = file_name
         file_path = os.path.join(flask.current_app.root_path, 'static', 'img', 'blog', file_name)
-        print(file_path)
         file.save(file_path)
 
         update_record['photo_url'] = file_name
-    print(update_record)
     # check if user is logged in
     if current_user and login_flag:
         output = blog_coll.update({"blog_id": int(blog_id)}, {"$set": update_record})
-        print(output)
         return {
             "status_code": STATUS["success"],
             "message": "Blog updated successfully.",
