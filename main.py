@@ -69,6 +69,19 @@ app.add_url_rule('/admin/mobile_blogs/delete', 'delete-mobile_blogs', view_func=
 app.add_url_rule('/admin/mobile_blogs/edit', 'edit-mobile_blogs', view_func=views.mobile_blogs_update, methods=["POST"])
 
 
+# /electronics_blog
+app.add_url_rule('/admin/electronics_blog', 'electronics_blog', view_func=views.electronics_blog_list, methods=["GET"])
+
+# 2 create
+app.add_url_rule('/admin/electronics_blog/create', 'create-electronics_blog', view_func=views.electronics_blog_create, methods=["POST"])
+
+# 3 delete
+app.add_url_rule('/admin/electronics_blog/delete', 'delete-electronics_blog', view_func=views.electronics_blog_delete, methods=["POST"])
+
+# 4 update
+app.add_url_rule('/admin/electronics_blog/edit', 'edit-electronics_blog', view_func=views.electronics_blog_update, methods=["POST"])
+
+
 
 # 5 blog detail
 app.add_url_rule('/blog/detail/<int:blog_id>', 'blog_detail', view_func=views.blog_detail, methods=["GET"])
