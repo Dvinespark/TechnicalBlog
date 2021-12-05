@@ -2,14 +2,14 @@
     <div class="humberger__menu__overlay"></div>
     <div class="humberger__menu__wrapper">
         <div class="humberger__menu__logo">
-            <a href="./index.html"><img src="static/img/humberger/techno-logo.png" alt=""></a>
+            <a href="{{ url_for('index') }}"><img src="static/img/humberger/techno-logo.png" alt=""></a>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
                 <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="#">Mobile</a></li>
-                <li><a href="#">Laptop</a></li>
-                <li><a href="#">Electronics</a></li>
+                <li><a href="{{ url_for('index', blog_tech='mobile') }}">Mobile</a></li>
+                <li><a href="{{ url_for('index', blog_tech='desktop') }}">Desktop</a></li>
+                <li><a href="{{ url_for('index', blog_tech='electronics') }}">Electronics</a></li>
                 <li><a href="{{ url_for('about') }}">About</a></li>
                 <li><a href="{{ url_for('contact') }}">Contact</a></li>
             </ul>
