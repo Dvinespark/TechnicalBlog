@@ -292,10 +292,10 @@
                                     <h6>Categories</h6>
                                 </div>
                                 <ul>
-                                    <li><a href="#">All <span>{{data['blog_count']}}</span></a></li>
-                                    <li><a href="#">Mobile <span>{{data['mobile_blog_count']}}</span></a></li>
-                                    <li><a href="#">Desktop <span>{{data['desktop_blog_count']}}</span></a></li>
-                                    <li><a href="#">Electronics <span>{{data['electronics_blog_count']}}</span></a></li>
+                                    <li><a href="{{ url_for('index', blog_tech='all') }}">All <span>{{data['blog_count']}}</span></a></li>
+                                    <li><a href="{{ url_for('index', blog_tech='mobile') }}">Mobile <span>{{data['mobile_blog_count']}}</span></a></li>
+                                    <li><a href="{{ url_for('index', blog_tech='desktop') }}">Desktop <span>{{data['desktop_blog_count']}}</span></a></li>
+                                    <li><a href="{{ url_for('index', blog_tech='electronics') }}">Electronics <span>{{data['electronics_blog_count']}}</span></a></li>
                                 </ul>
                             </div>
                         </div>
