@@ -691,8 +691,6 @@ def mobile_blogs_delete():
     }
 
 
-
-
 def blog_detail(blog_id):
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
