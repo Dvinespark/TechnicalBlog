@@ -1,4 +1,5 @@
-from flask import Flask
+import flask
+from flask import Flask, render_template
 from views import views
 from config import flask_secret_key
 
@@ -108,6 +109,12 @@ app.add_url_rule('/admin/electronics_blog/delete', 'delete-electronics_blog', vi
 
 # 4 update
 app.add_url_rule('/admin/electronics_blog/edit', 'edit-electronics_blog', view_func=views.electronics_blog_update, methods=["POST"])
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True )

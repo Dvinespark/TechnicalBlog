@@ -10,6 +10,30 @@ STATUS = {
 }
 
 
+def login_decorator(func):
+    def function_wrapper():
+        context = {
+            "login_flag": False,
+            "user_admin": False,
+            "username": None
+        }
+        # checks for admin
+        login_flag = session.get('login_flag', False)
+        username = session.get('username', None)
+        admin_flag = session.get('admin_flag', False)
+        if not login_flag and username is None and not admin_flag:
+            # session variables
+            session["signup_flag"] = False
+            session["signup_message"] = None
+            session["login_flag"] = False
+            session["admin_flag"] = False
+            session["username"] = None
+            context["login_message"] = "You have to be admin to access that page."
+            return render_template("signin.html", data=context)
+        return func()
+    return function_wrapper
+
+
 def index():
     # start passing data to UI
     db = MongoDB()
@@ -76,16 +100,22 @@ def index():
     }
     login_flag = session.get('login_flag', False)
     username = session.get('username', None)
-    if login_flag and username:
-        return render_template("index.html", data=context)
+    if not login_flag or not username:
+        # session variables
+        session["login_flag"] = False
+        session["username"] = None
+        session["signup_flag"] = False
+        session["signup_message"] = None
+        session["admin_flag"] = False
 
-    # session variables
-    session["login_flag"] = False
-    session["username"] = None
-    session["signup_flag"] = False
-    session["signup_message"] = None
+    # # session variables
+    # session["login_flag"] = False
+    # session["username"] = None
+    # session["signup_flag"] = False
+    # session["signup_message"] = None
 
-    return render_template("signin.html", data=context)
+    # return render_template("signin.html", data=context)
+    return render_template("index.html", data=context)
 
 
 def login():
@@ -202,18 +232,14 @@ def register():
 
 # admin panel
 
-
+@login_decorator
 def admin():
     context = {
         "login_flag": False,
         "user_admin": False,
         "username": None
     }
-    # checks for admin
-    login_flag = session.get('login_flag', False)
     username = session.get('username', None)
-    admin_flag = session.get('admin_flag', False)
-
     db = MongoDB()
     user_coll = db.get_collection("user")
     user = user_coll.find_one({"username": username})
@@ -222,18 +248,11 @@ def admin():
         context["super_admin_flag"] = True
     else:
         context["super_admin_flag"] = False
-    if login_flag and username and admin_flag:
-        return render_template("admin/admin.html", data=context)
-
-    # session variables
-    session["signup_flag"] = False
-    session["signup_message"] = None
-    session["login_flag"] = False
-    context["login_message"] = "You have to be admin to access that page."
-    return render_template("signin.html", data=context)
+    return render_template("admin/admin.html", data=context)
 
 
 # list
+@login_decorator
 def users():
     current_user = session.get('username', None)
     db = MongoDB()
@@ -249,6 +268,7 @@ def users():
 
 
 # delete user
+@login_decorator
 def delete_user():
     context = {
         "login_flag": False,
@@ -266,28 +286,8 @@ def delete_user():
     }
 
 
-# Blog Part here
-
-
-# 1 comment
-def comment_list():
-    comment_data = {
-        "username": "username",
-        "blog_id": "blog_id",
-        "comment": "comment",
-        "active": True
-    }
-
-
-def comment_create():
-    pass
-
-
-def comment_delete():
-    pass
-
-
 # 2 blog
+@login_decorator
 def blog_list():
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
@@ -308,6 +308,7 @@ def blog_list():
     return render_template("admin/blog.html", data=context)
 
 
+@login_decorator
 def blog_create():
     # db.SOME_COLLECTION.find().sort({"_id": -1}).limit(1)
     db = MongoDB()
@@ -364,6 +365,7 @@ def blog_create():
         }
 
 
+@login_decorator
 def blog_update():
     current_user = session.get('username', None)
     login_flag = session.get('login_flag', False)
@@ -430,6 +432,7 @@ def blog_update():
         }
 
 
+@login_decorator
 def blog_delete():
     blog_id = int(request.form['blog_id'])
     db = MongoDB()
@@ -445,7 +448,7 @@ def blog_delete():
 
 # /admin/emails
 
-
+@login_decorator
 def admin_emails():
     db = MongoDB()
     contact_coll = db.get_collection("contacts")
@@ -456,6 +459,7 @@ def admin_emails():
     return render_template("admin/emails.html", data=context)
 
 
+@login_decorator
 def admin_emails_update():
     current_user = session.get('username', None)
     login_flag = session.get('login_flag', False)
@@ -526,6 +530,7 @@ def about():
 
 
 # 2 blog
+@login_decorator
 def desktop_blogs_list():
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
@@ -545,6 +550,7 @@ def desktop_blogs_list():
 
 
 # 2 mobile blog
+@login_decorator
 def mobile_blogs_list():
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
@@ -563,6 +569,7 @@ def mobile_blogs_list():
     return render_template("admin/mobile_blogs.html", data=context)
 
 
+@login_decorator
 def mobile_blogs_create():
     # db.SOME_COLLECTION.find().sort({"_id": -1}).limit(1)
     db = MongoDB()
@@ -619,6 +626,7 @@ def mobile_blogs_create():
         }
 
 
+@login_decorator
 def mobile_blogs_update():
     current_user = session.get('username', None)
     login_flag = session.get('login_flag', False)
@@ -681,6 +689,7 @@ def mobile_blogs_update():
         }
 
 
+@login_decorator
 def mobile_blogs_delete():
     blog_id = int(request.form['blog_id'])
     db = MongoDB()
@@ -714,6 +723,7 @@ def blog_detail(blog_id):
     return render_template("blog_detail.html", data=context)
 
 
+@login_decorator
 def desktop_blogs_create():
     # db.SOME_COLLECTION.find().sort({"_id": -1}).limit(1)
     db = MongoDB()
@@ -771,6 +781,7 @@ def desktop_blogs_create():
         }
 
 
+@login_decorator
 def desktop_blogs_update():
     current_user = session.get('username', None)
     login_flag = session.get('login_flag', False)
@@ -831,6 +842,7 @@ def desktop_blogs_update():
         }
 
 
+@login_decorator
 def desktop_blogs_delete():
     blog_id = int(request.form['blog_id'])
     db = MongoDB()
@@ -875,6 +887,7 @@ def blog_comment():
     return redirect(url_for("login"))
 
 
+@login_decorator
 def admin_comments():
     db = MongoDB()
     contact_coll = db.get_collection("comments")
@@ -885,6 +898,7 @@ def admin_comments():
     return render_template("admin/comments.html", data=context)
 
 
+@login_decorator
 def admin_comment_update():
     current_user = session.get('username', None)
     login_flag = session.get('login_flag', False)
@@ -922,6 +936,7 @@ def admin_comment_update():
 
 
 # 2 electronics blog
+@login_decorator
 def electronics_blog_list():
 
     db = MongoDB()
@@ -941,6 +956,7 @@ def electronics_blog_list():
     return render_template("admin/electronics_blog.html", data=context)
 
 
+@login_decorator
 def electronics_blog_create():
     # db.SOME_COLLECTION.find().sort({"_id": -1}).limit(1)
     db = MongoDB()
@@ -997,6 +1013,7 @@ def electronics_blog_create():
         }
 
 
+@login_decorator
 def electronics_blog_update():
     current_user = session.get('username', None)
     login_flag = session.get('login_flag', False)
@@ -1058,6 +1075,7 @@ def electronics_blog_update():
         }
 
 
+@login_decorator
 def electronics_blog_delete():
     blog_id = int(request.form['blog_id'])
     db = MongoDB()
@@ -1070,4 +1088,3 @@ def electronics_blog_delete():
         "db_message": str(blog),
         "url": url_for("electronics_blog")
     }
-
