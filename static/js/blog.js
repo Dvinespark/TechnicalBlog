@@ -14,7 +14,7 @@ $(document).ready(function(){
             console.log("delete button clicked");
             $.ajax({
                 type: 'post',
-                url: "mobile_blogs/delete",
+                url: "blogs/delete",
                 data: data,
                 success: function (response) {
                     console.log(response);
@@ -53,7 +53,7 @@ $(document).ready(function(){
 
             $.ajax({
                 type: 'post',
-                url: "mobile_blogs/create",
+                url: "blogs/create",
                 data: form_data,
                 processData: false,
                 contentType: false,
@@ -118,7 +118,7 @@ $(document).ready(function(){
             }
             $.ajax({
                 type: 'post',
-                url: "mobile_blogs/edit",
+                url: "blogs/edit",
                 data: form_data,
                 processData: false,
                 contentType: false,
