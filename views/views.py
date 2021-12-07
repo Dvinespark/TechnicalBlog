@@ -11,21 +11,6 @@ STATUS = {
 
 
 def index():
-    # db = MongoDB()
-    # print(db.connection_string)
-    # print(db.database_name)
-    # print(db.mongo_client)
-    #
-    # # list databases
-    # # print(db._db)
-    # # for d in db.mongo_client.list_databases():
-    # #     print(d)
-    #
-    # collection = db.get_collection("user")
-    # result = collection.find({})
-    # for document in result:
-    #     print(document)
-
     # start passing data to UI
     db = MongoDB()
     collection = db.get_collection("blogs")
@@ -228,6 +213,15 @@ def admin():
     login_flag = session.get('login_flag', False)
     username = session.get('username', None)
     admin_flag = session.get('admin_flag', False)
+
+    db = MongoDB()
+    user_coll = db.get_collection("user")
+    user = user_coll.find_one({"username": username})
+    user_access = user.get("access", None);
+    if user_access is not None:
+        context["super_admin_flag"] = True
+    else:
+        context["super_admin_flag"] = False
     if login_flag and username and admin_flag:
         return render_template("admin/admin.html", data=context)
 
@@ -295,27 +289,21 @@ def comment_delete():
 
 # 2 blog
 def blog_list():
-    # blog_data = {
-    #     "blog_id": password1,
-    #     "small_description": email,
-    #     "active": True,
-    #     "long_description": active,
-    #     "photo_url": fullname,
-    #     "blog_type": "feature",  # default type will be normal
-    #     "blog_technology": "mobile", # desktop, science, all
-    #     "inserted_date": today date,
-    #     "updated_date": None,
-    #     "created_by": username,
-    #     "updated_by": username
-    # }
-
-    # do the admin check if admin then do the following
-
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
-    blogs = blog_coll.find({})
+
+    # access for superuser
+    username = session.get('username', None)
+    user_coll = db.get_collection("user")
+    user = user_coll.find_one({"username": username})
+    user_access = user.get("access", None);
+    if user_access is not None:
+        blogs = blog_coll.find({})
+    else:
+        blogs = blog_coll.find({"created_by": username})
+
     context = {
-        "blogs": blogs
+            "blogs": blogs
     }
     return render_template("admin/blog.html", data=context)
 
@@ -541,7 +529,15 @@ def about():
 def desktop_blogs_list():
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
-    blogs = blog_coll.find({"blog_tech": "desktop"})
+    # access for superuser
+    username = session.get('username', None)
+    user_coll = db.get_collection("user")
+    user = user_coll.find_one({"username": username})
+    user_access = user.get("access", None);
+    if user_access is not None:
+        blogs = blog_coll.find({"blog_tech": "desktop"})
+    else:
+        blogs = blog_coll.find({"blog_tech": "desktop", "created_by": username})
     context = {
         "blogs": blogs
     }
@@ -552,7 +548,15 @@ def desktop_blogs_list():
 def mobile_blogs_list():
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
-    blogs = blog_coll.find({"blog_tech": "mobile"})
+    # access for superuser
+    username = session.get('username', None)
+    user_coll = db.get_collection("user")
+    user = user_coll.find_one({"username": username})
+    user_access = user.get("access", None);
+    if user_access is not None:
+        blogs = blog_coll.find({"blog_tech": "mobile"})
+    else:
+        blogs = blog_coll.find({"blog_tech": "mobile", "created_by": username})
     context = {
         "blogs": blogs
     }
@@ -919,9 +923,18 @@ def admin_comment_update():
 
 # 2 electronics blog
 def electronics_blog_list():
+
     db = MongoDB()
     blog_coll = db.get_collection("blogs")
-    blogs = blog_coll.find({"blog_tech": "electronics"})
+    # access for superuser
+    username = session.get('username', None)
+    user_coll = db.get_collection("user")
+    user = user_coll.find_one({"username": username})
+    user_access = user.get("access", None);
+    if user_access is not None:
+        blogs = blog_coll.find({"blog_tech": "electronics"})
+    else:
+        blogs = blog_coll.find({"blog_tech": "electronics", "created_by": username})
     context = {
         "blogs": blogs
     }

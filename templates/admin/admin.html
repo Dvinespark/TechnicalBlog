@@ -26,13 +26,15 @@
   </ul>
   <hr>
   <div class="list-group">
-    <a href="{{url_for('users')}}" class="list-group-item list-group-item-action">Users</a>
+    {% if data['super_admin_flag'] %}
+      <a href="{{url_for('users')}}" class="list-group-item list-group-item-action">Users</a>
+      <a href="{{url_for('admin-comments')}}" class="list-group-item list-group-item-action list-group-item-dark">Blog Comments</a>
+      <a href="{{url_for('admin-email')}}" class="list-group-item list-group-item-action list-group-item-light">Emails</a>
+    {% endif %}
     <a href="{{url_for('blogs')}}" class="list-group-item list-group-item-action list-group-item-success">Blog Article</a>
     <a href="{{url_for('mobile_blogs')}}" class="list-group-item list-group-item-action list-group-item-mobile">Mobile Blogs Article</a>
     <a href="{{url_for('desktop_blogs')}}" class="list-group-item list-group-item-action list-group-item-info">Desktop Blogs Article</a>
     <a href="{{url_for('electronics_blog')}}" class="list-group-item list-group-item-action list-group-item-electronics">Electronics Blog</a>
-    <a href="{{url_for('admin-comments')}}" class="list-group-item list-group-item-action list-group-item-dark">Blog Comments</a>
-    <a href="{{url_for('admin-email')}}" class="list-group-item list-group-item-action list-group-item-light">Emails</a>
   </div>
 </div>
 
