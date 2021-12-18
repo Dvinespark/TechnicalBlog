@@ -4,4 +4,4 @@ Python group project using flask and mongodb
   1. Login Logout pages
   2. Blog create update delete list detail pages
   3. people can comment in their blog
-  4. for admins, see user lists and they can delete or add users manually
+  4. for admins, see user lists and they can delete
